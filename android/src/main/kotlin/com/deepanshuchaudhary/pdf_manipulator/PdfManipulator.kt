@@ -68,6 +68,9 @@ class PdfManipulator(
         sourceFileUri: String?,
         pageCount: Int,
         byteSize: Int?,
+        pageNumbers: List<Int>?,
+        pageRanges: List<String>?,
+        pageRange: String?,
     ) {
         Log.d(
             LOG_TAG,
@@ -84,6 +87,12 @@ class PdfManipulator(
             try {
                 val splitPDFPaths: List<String>? = if (byteSize != null) {
                     getSplitPDFPathsByByteSize(sourceFileUri!!, byteSize.toLong(), activity)
+                } else if (pageNumbers != null) {
+                    getSplitPDFPathsByPageNumbers(sourceFileUri!!, pageNumbers, activity)
+                } else if (pageRanges != null) {
+                    getSplitPDFPathsByPageRanges(sourceFileUri!!, pageRanges, activity)
+                } else if (pageRange != null) {
+                    getSplitPDFPathsByPageRange(sourceFileUri!!, pageRange, activity)
                 } else {
                     getSplitPDFPathsByPageCount(sourceFileUri!!, pageCount, activity)
                 }

@@ -131,6 +131,15 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 sourceFileUri = call.argument("pdfUri"),
                 pageCount = call.argument("pageCount") ?: 1,
                 byteSize = call.argument("byteSize"),
+                pageNumbers = parseMethodCallArrayOfIntArgument(
+                    call,
+                    "pageNumbers"
+                ),
+                pageRanges = parseMethodCallArrayOfStringArgument(
+                    call,
+                    "pageRanges"
+                ),
+                pageRange = call.argument("pageRange"),
             )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
@@ -159,6 +168,16 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     ): List<String>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<String>>(arg)?.toList()
+        }
+        return null
+    }
+
+    private fun parseMethodCallArrayOfIntArgument(
+        call: MethodCall,
+        arg: String
+    ): List<Int>? {
+        if (call.hasArgument(arg)) {
+            return call.argument<ArrayList<Int>>(arg)?.toList()
         }
         return null
     }

@@ -54,7 +54,7 @@ class PDFSplitterParams {
   /// Provide uris of pdf file to split.
   final String pdfUri;
 
-  /// Provide the splitting pageCount.
+  /// Provide the splitting page count.
   final int? pageCount;
 
   /// Provide the splitting byte size.
@@ -62,16 +62,39 @@ class PDFSplitterParams {
   /// It will give some pdf bigger than the byte size if the some individual pages in pdf are bigger than the byte size.
   final int? byteSize;
 
+  /// Provide the splitting page numbers.
+  final List<int>? pageNumbers;
+
+  /// Provide the splitting page range list.
+  final List<String>? pageRanges;
+
+  /// Provide the splitting page range.
+  final String? pageRange;
+
   /// Create parameters for the [splitPDF] method.
-  const PDFSplitterParams({required this.pdfUri, this.pageCount, this.byteSize})
-      : assert(pageCount == null || byteSize == null,
-            'provide only any one out of pageCount or byteSize');
+  const PDFSplitterParams(
+      {required this.pdfUri,
+      this.pageCount,
+      this.byteSize,
+      this.pageNumbers,
+      this.pageRanges,
+      this.pageRange})
+      : assert(
+            pageCount == null ||
+                byteSize == null ||
+                pageNumbers == null ||
+                pageRanges == null ||
+                pageRange == null,
+            'provide only any one out of pageCount or byteSize or pageNumbers or pageRanges or pageRange');
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'pdfUri': pdfUri,
       'pageCount': pageCount,
       'byteSize': byteSize,
+      'pageNumbers': pageNumbers,
+      'pageRanges': pageRanges,
+      'pageRange': pageRange,
     };
   }
 }

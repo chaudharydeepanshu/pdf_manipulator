@@ -229,6 +229,48 @@ class _MyAppState extends State<MyApp> {
                                 child: const Text("split(byte size)")),
                           ],
                         ),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFSplitterParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pageNumbers: [2, 10],
+                                        );
+                                        await _splitPDF(params);
+                                      },
+                                child: const Text("split(page numbers)")),
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFSplitterParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pageRanges: ["2", "10-15"],
+                                        );
+                                        await _splitPDF(params);
+                                      },
+                                child:
+                                    const Text("split(extract page ranges)")),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFSplitterParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pageRange: "2, 10-11, 3",
+                                        );
+                                        await _splitPDF(params);
+                                      },
+                                child: const Text("split(extract page range)")),
+                          ],
+                        ),
                         OutlinedButton(
                             onPressed: _isBusy
                                 ? null
