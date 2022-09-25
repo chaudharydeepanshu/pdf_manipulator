@@ -120,6 +120,52 @@ class PdfManipulator(
         Log.d(LOG_TAG, "splitPdf - OUT")
     }
 
+    // For removing pages from pdf.
+    fun pdfPageDeleter(
+        result: MethodChannel.Result,
+        sourceFileUri: String?,
+        pageNumbers: List<Int>?,
+    ) {
+        Log.d(
+            LOG_TAG,
+            "removePdfPages - IN, sourceFileUri=$sourceFileUri"
+        )
+
+        if (!setPendingResult(result)) {
+            finishWithAlreadyActiveError(result)
+            return
+        }
+
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        job = uiScope.launch {
+            try {
+                val resultPDFPath: String? =
+                    getPDFPageDeleter(sourceFileUri!!, pageNumbers!!, activity)
+
+                finishMergeSuccessfully(resultPDFPath)
+            } catch (e: Exception) {
+                finishWithError(
+                    "removePdfPages_exception",
+                    e.stackTraceToString(),
+                    null
+                )
+//            withContext(Dispatchers.IO) {
+//                clearPDFFilesFromCache(context = activity)
+//            }
+            } catch (e: OutOfMemoryError) {
+                finishWithError(
+                    "removePdfPages_OutOfMemoryError",
+                    e.stackTraceToString(),
+                    null
+                )
+//            withContext(Dispatchers.IO) {
+//                clearPDFFilesFromCache(context = activity)
+//            }
+            }
+        }
+        Log.d(LOG_TAG, "removePdfPages - OUT")
+    }
+
     fun cancelManipulations(
     ) {
         job?.cancel()

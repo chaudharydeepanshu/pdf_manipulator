@@ -24,6 +24,13 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<String?> pdfPageDeleter({PDFPageDeleterParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfPageDeleter', params?.toJson());
+    return path;
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -95,6 +102,27 @@ class PDFSplitterParams {
       'pageNumbers': pageNumbers,
       'pageRanges': pageRanges,
       'pageRange': pageRange,
+    };
+  }
+}
+
+/// Parameters for the [mergePDFs] method.
+class PDFPageDeleterParams {
+  /// Provide uri of pdf files from which page should be deleted.
+  final String pdfUri;
+
+  /// Provide the page numbers to delete.
+  final List<int> pageNumbers;
+
+  /// Create parameters for the [mergePDFs] method.
+  const PDFPageDeleterParams({required this.pdfUri, required this.pageNumbers})
+      : assert(
+            pageNumbers.length > 0, 'provide at least 1 page number to delete');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfUri': pdfUri,
+      'pageNumbers': pageNumbers,
     };
   }
 }

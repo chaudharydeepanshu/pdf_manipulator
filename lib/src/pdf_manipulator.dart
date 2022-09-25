@@ -18,6 +18,14 @@ class PdfManipulator {
     return PdfManipulatorPlatform.instance.splitPDF(params: params);
   }
 
+  /// Deletes pages from provided pdf file.
+  ///
+  /// Returns the path or uri of the resultant merged file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<String?> pdfPageDeleter({PDFPageDeleterParams? params}) {
+    return PdfManipulatorPlatform.instance.pdfPageDeleter(params: params);
+  }
+
   /// Cancels running manipulations.
   ///
   /// Returns the cancelling message.

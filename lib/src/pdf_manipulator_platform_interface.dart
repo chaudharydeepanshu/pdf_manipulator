@@ -31,6 +31,10 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('splitPDF() has not been implemented.');
   }
 
+  Future<String?> pdfPageDeleter({PDFPageDeleterParams? params}) {
+    throw UnimplementedError('pdfPageDeleter() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

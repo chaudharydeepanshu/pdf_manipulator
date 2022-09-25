@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   String? _mergedPDFPath;
   List<String>? _splitPDFPaths;
+  String? _resultPDFPath;
 
   bool _isBusy = false;
   final bool _localOnly = false;
@@ -104,6 +105,24 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
     setState(() {
       _splitPDFPaths = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfPageDeleter(PDFPageDeleterParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfPageDeleter(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
       _isBusy = false;
     });
   }
@@ -278,6 +297,62 @@ class _MyAppState extends State<MyApp> {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
                                       sourceFilesPaths: _splitPDFPaths,
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save split pdfs")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("Delete PDF pages"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFPageDeleterParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pageNumbers: [1, 2, 3],
+                                        );
+                                        await _pdfPageDeleter(params);
+                                      },
+                                child: const Text("delete pages")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
                                     );
                                     await _fileSaver(params);
                                   },

@@ -141,6 +141,14 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 ),
                 pageRange = call.argument("pageRange"),
             )
+            "pdfPageDeleter" -> pdfManipulator!!.pdfPageDeleter(
+                result,
+                sourceFileUri = call.argument("pdfUri"),
+                pageNumbers = parseMethodCallArrayOfIntArgument(
+                    call,
+                    "pageNumbers"
+                ),
+            )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
         }
