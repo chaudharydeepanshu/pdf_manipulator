@@ -4,7 +4,7 @@
 
 A flutter plugin for easy pdf manipulations.
 
-Note 1: This package is using iText7 for pdf manipulations and it uses its AGPL Licence.
+Note 1: This package is using iText7 for pdf manipulations and it uses its AGPL LICENSE.
 
 Note 2: This package currently supports only Android native URIs of files not absolute file paths and to get the Android native URIs of files you can use [pick_or_save](https://pub.dev/packages/pick_or_save) plugin.
 
