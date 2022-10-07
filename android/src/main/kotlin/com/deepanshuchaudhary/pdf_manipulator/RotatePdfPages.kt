@@ -11,10 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-// For removing pages from pdf.
-suspend fun getPDFPageDeleter(
+data class PageRotationInfo(var pageNumber: Int, val rotationAngle: Int)
+
+// For rotating pages of pdf.
+suspend fun getPDFPageRotator(
     sourceFileUri: String,
-    pageNumbers: List<Int>,
+    pagesRotationInfo: List<PageRotationInfo>,
     context: Activity,
 ): String? {
 
@@ -49,17 +51,19 @@ suspend fun getPDFPageDeleter(
         pdfWriter.setSmartMode(true)
         pdfWriter.compressionLevel = 9
 
-        val pdfDocument =
-            PdfDocument(pdfReader, pdfWriter)
+        val pdfDoc = PdfDocument(pdfReader, pdfWriter)
 
-        //Important to use descending as we remove a page the number of pages in your PDF will change
-        val descendingListOfPageNumbers = pageNumbers.sortedDescending()
-
-        for(pageNumber in descendingListOfPageNumbers){
-            pdfDocument.removePage(pageNumber)
+        pagesRotationInfo.forEach {pageRotationInfo ->
+            val page = pdfDoc.getPage(pageRotationInfo.pageNumber)
+            val rotate = page.rotation
+            if (rotate == 0) {
+                page.rotation = pageRotationInfo.rotationAngle
+            } else {
+                page.rotation = (rotate + pageRotationInfo.rotationAngle) % 360
+            }
         }
 
-        pdfDocument.close()
+        pdfDoc.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 

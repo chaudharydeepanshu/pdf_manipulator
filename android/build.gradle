@@ -56,6 +56,6 @@ dependencies {
 
     implementation 'org.slf4j:slf4j-api:1.7.36'
 
-    implementation 'com.itextpdf.android:kernel-android:7.2.2'
-    implementation 'com.itextpdf.android:layout-android:7.2.2'
+    implementation 'com.itextpdf.android:kernel-android:7.2.3'
+    implementation 'com.itextpdf.android:layout-android:7.2.3'
 }

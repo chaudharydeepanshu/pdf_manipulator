@@ -1,3 +1,9 @@
+## 0.1.1
+
+* Support for rotating, deleting and reordering pdf pages.
+* Fixes OOfM error in some cases.
+* Fixes few errors in splitting by byte size.
+
 ## 0.0.2
 
 * Readme Typo fix.

@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-// For removing pages from pdf.
-suspend fun getPDFPageDeleter(
+// For reordering pages of pdf.
+suspend fun getPDFPageReorder(
     sourceFileUri: String,
     pageNumbers: List<Int>,
     context: Activity,
@@ -49,17 +49,16 @@ suspend fun getPDFPageDeleter(
         pdfWriter.setSmartMode(true)
         pdfWriter.compressionLevel = 9
 
-        val pdfDocument =
-            PdfDocument(pdfReader, pdfWriter)
+        val srcDoc = PdfDocument(pdfReader)
+        val resultDoc = PdfDocument(pdfWriter)
 
-        //Important to use descending as we remove a page the number of pages in your PDF will change
-        val descendingListOfPageNumbers = pageNumbers.sortedDescending()
+        // One should call this method to preserve the outlines of the source pdf file, otherwise they
+        // will be absent in the resultant document to which we copy pages. In this particular sample,
+        resultDoc.initializeOutlines()
 
-        for(pageNumber in descendingListOfPageNumbers){
-            pdfDocument.removePage(pageNumber)
-        }
-
-        pdfDocument.close()
+        srcDoc.copyPagesTo(pageNumbers, resultDoc)
+        resultDoc.close()
+        srcDoc.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 

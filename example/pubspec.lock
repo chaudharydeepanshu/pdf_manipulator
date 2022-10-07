@@ -108,14 +108,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.3"
   pick_or_save:
     dependency: "direct main"
     description:
       name: pick_or_save
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.5"
+    version: "0.0.9"
   plugin_platform_interface:
     dependency: transitive
     description:

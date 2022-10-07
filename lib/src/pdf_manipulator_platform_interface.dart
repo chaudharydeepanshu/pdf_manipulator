@@ -35,6 +35,20 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('pdfPageDeleter() has not been implemented.');
   }
 
+  Future<String?> pdfPageReorder({PDFPageReorderParams? params}) {
+    throw UnimplementedError('pdfPageReorder() has not been implemented.');
+  }
+
+  Future<String?> pdfPageRotator({PDFPageRotatorParams? params}) {
+    throw UnimplementedError('pdfPageRotator() has not been implemented.');
+  }
+
+  Future<String?> pdfPageRotatorDeleterReorder(
+      {PDFPageRotatorDeleterReorderParams? params}) {
+    throw UnimplementedError(
+        'pdfPageRotatorDeleterReorder() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

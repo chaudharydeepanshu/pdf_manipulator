@@ -31,6 +31,28 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<String?> pdfPageReorder({PDFPageReorderParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfPageReorder', params?.toJson());
+    return path;
+  }
+
+  @override
+  Future<String?> pdfPageRotator({PDFPageRotatorParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfPageRotator', params?.toJson());
+    return path;
+  }
+
+  @override
+  Future<String?> pdfPageRotatorDeleterReorder(
+      {PDFPageRotatorDeleterReorderParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfPageRotatorDeleterReorder', params?.toJson());
+    return path;
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -106,7 +128,7 @@ class PDFSplitterParams {
   }
 }
 
-/// Parameters for the [mergePDFs] method.
+/// Parameters for the [pdfPageDeleter] method.
 class PDFPageDeleterParams {
   /// Provide uri of pdf files from which page should be deleted.
   final String pdfUri;
@@ -114,7 +136,7 @@ class PDFPageDeleterParams {
   /// Provide the page numbers to delete.
   final List<int> pageNumbers;
 
-  /// Create parameters for the [mergePDFs] method.
+  /// Create parameters for the [pdfPageDeleter] method.
   const PDFPageDeleterParams({required this.pdfUri, required this.pageNumbers})
       : assert(
             pageNumbers.length > 0, 'provide at least 1 page number to delete');
@@ -123,6 +145,109 @@ class PDFPageDeleterParams {
     return <String, dynamic>{
       'pdfUri': pdfUri,
       'pageNumbers': pageNumbers,
+    };
+  }
+}
+
+/// Parameters for the [pdfPageReorder] method.
+class PDFPageReorderParams {
+  /// Provide uri of pdf files for which page should be reordered.
+  final String pdfUri;
+
+  /// Provide the reordered page numbers.
+  final List<int> pageNumbers;
+
+  /// Create parameters for the [pdfPageReorder] method.
+  const PDFPageReorderParams({required this.pdfUri, required this.pageNumbers})
+      : assert(pageNumbers.length > 0, 'pageNumbers cant be empty');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfUri': pdfUri,
+      'pageNumbers': pageNumbers,
+    };
+  }
+}
+
+class PageRotationInfo {
+  final int pageNumber;
+  final int rotationAngle;
+
+  PageRotationInfo({
+    required this.pageNumber,
+    required this.rotationAngle,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pageNumber': pageNumber,
+      'rotationAngle': rotationAngle,
+    };
+  }
+
+  // Implement toString to make it easier to see information
+  // when using the print statement.
+  @override
+  String toString() {
+    return 'PageRotationInfo{pageNumber: $pageNumber, rotationAngle: $rotationAngle}';
+  }
+}
+
+/// Parameters for the [pdfPageRotator] method.
+class PDFPageRotatorParams {
+  /// Provide uri of pdf files for which page should be reordered.
+  final String pdfUri;
+
+  /// Provide the rotation info for pdf pages.
+  final List<PageRotationInfo> pagesRotationInfo;
+
+  /// Create parameters for the [pdfPageRotator] method.
+  const PDFPageRotatorParams(
+      {required this.pdfUri, required this.pagesRotationInfo})
+      : assert(pagesRotationInfo.length > 0, 'pageNumbers cant be empty');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfUri': pdfUri,
+      'pagesRotationInfo': pagesRotationInfo.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+/// Parameters for the [pdfPageRotator] method.
+class PDFPageRotatorDeleterReorderParams {
+  /// Provide uri of pdf files for which page should be reordered.
+  final String pdfUri;
+
+  /// Provide the rotation info for pdf pages.
+  final List<PageRotationInfo>? pagesRotationInfo;
+
+  /// Provide the page numbers to delete.
+  final List<int>? pageNumbersForDeleter;
+
+  /// Provide the reordered page numbers.
+  final List<int>? pageNumbersForReorder;
+
+  /// Create parameters for the [pdfPageRotator] method.
+  const PDFPageRotatorDeleterReorderParams(
+      {required this.pdfUri,
+      this.pagesRotationInfo,
+      this.pageNumbersForDeleter,
+      this.pageNumbersForReorder})
+      : assert(
+            (pagesRotationInfo != null && pagesRotationInfo.length > 0) ||
+                (pageNumbersForDeleter != null &&
+                    pageNumbersForDeleter.length > 0) ||
+                (pageNumbersForReorder != null &&
+                    pageNumbersForReorder.length > 0),
+            'out of pagesRotationInfo, pageNumbersForDeleter, pageNumbersForReorder provide at least one non empty');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfUri': pdfUri,
+      'pagesRotationInfo': pagesRotationInfo?.map((e) => e.toJson()).toList(),
+      'pageNumbersForDeleter': pageNumbersForDeleter,
+      'pageNumbersForReorder': pageNumbersForReorder,
     };
   }
 }

@@ -149,6 +149,38 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "pageNumbers"
                 ),
             )
+            "pdfPageReorder" -> pdfManipulator!!.pdfPageReorder(
+                result,
+                sourceFileUri = call.argument("pdfUri"),
+                pageNumbers = parseMethodCallArrayOfIntArgument(
+                    call,
+                    "pageNumbers"
+                ),
+            )
+            "pdfPageRotator" -> pdfManipulator!!.pdfPageRotator(
+                result,
+                sourceFileUri = call.argument("pdfUri"),
+                pagesRotationInfo = parseMethodCallArrayOfMapArgument(
+                    call,
+                    "pagesRotationInfo"
+                ),
+            )
+            "pdfPageRotatorDeleterReorder" -> pdfManipulator!!.pdfPageRotatorDeleterReorder(
+                result,
+                sourceFileUri = call.argument("pdfUri"),
+                pageNumbersForReorder = parseMethodCallArrayOfIntArgument(
+                    call,
+                    "pageNumbersForReorder"
+                ) ?: listOf(),
+                pageNumbersForDeleter = parseMethodCallArrayOfIntArgument(
+                    call,
+                    "pageNumbersForDeleter"
+                ) ?: listOf(),
+                pagesRotationInfo = parseMethodCallArrayOfMapArgument(
+                    call,
+                    "pagesRotationInfo"
+                ) ?: listOf(),
+            )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
         }
@@ -186,6 +218,16 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     ): List<Int>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<Int>>(arg)?.toList()
+        }
+        return null
+    }
+
+    private fun parseMethodCallArrayOfMapArgument(
+        call: MethodCall,
+        arg: String
+    ): List<Map<String, Int>>? {
+        if (call.hasArgument(arg)) {
+            return call.argument<ArrayList<Map<String, Int>>>(arg)?.toList()
         }
         return null
     }

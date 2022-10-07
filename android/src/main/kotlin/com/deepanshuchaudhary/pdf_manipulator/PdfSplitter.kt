@@ -42,14 +42,18 @@ suspend fun getSplitPDFPathsByPageCount(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageCount: Int) {
             yield()
-            object : PdfSplitter(PdfDocument(PdfReader(src).setMemorySavingMode(true))) {
+            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {
                         val splitTempFile: File =
                             File.createTempFile("splitTempFile_" + partNumber++ + "_", ".pdf")
                         splitTempFilesList.add(splitTempFile)
-                        PdfWriter(splitTempFile)
+                        val pdfWriter = PdfWriter(splitTempFile)
+                        pdfWriter.setSmartMode(true)
+                        pdfWriter.compressionLevel = 9
+                        pdfWriter
                     } catch (ignored: FileNotFoundException) {
                         throw RuntimeException()
                     }
@@ -59,6 +63,7 @@ suspend fun getSplitPDFPathsByPageCount(
             ) { pdfDocument, _ ->
                 pdfDocument.close()
             }
+            readerPdfDocument.close()
         }
 
         val sourceTempFile: File = File.createTempFile("readerTempFile", ".pdf")
@@ -117,15 +122,18 @@ suspend fun getSplitPDFPathsByByteSize(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, byteSize: Long) {
             yield()
-            val pdfDoc = PdfDocument(PdfReader(src).setMemorySavingMode(true))
-            val splitDocuments: List<PdfDocument> = object : PdfSplitter(pdfDoc) {
+            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val splitDocuments: List<PdfDocument> = object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {
                         val splitTempFile: File =
                             File.createTempFile("splitTempFile_" + partNumber++ + "_", ".pdf")
                         splitTempFilesList.add(splitTempFile)
-                        PdfWriter(splitTempFile)
+                        val pdfWriter = PdfWriter(splitTempFile)
+                        pdfWriter.setSmartMode(true)
+                        pdfWriter.compressionLevel = 9
+                        pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)
                     }
@@ -134,7 +142,7 @@ suspend fun getSplitPDFPathsByByteSize(
             for (doc in splitDocuments) {
                 doc.close()
             }
-            pdfDoc.close()
+            readerPdfDocument.close()
         }
 
         val sourceTempFile: File = File.createTempFile("readerTempFile", ".pdf")
@@ -175,7 +183,7 @@ suspend fun getSplitPDFPathsByPageNumbers(
     context: Activity,
 ): List<String>? {
 
-    val splitPDFPaths: List<String>?
+    var splitPDFPaths: List<String>? = null
 
     withContext(Dispatchers.IO) {
 
@@ -192,21 +200,28 @@ suspend fun getSplitPDFPathsByPageNumbers(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageNumbers: List<Int>) {
             yield()
-            object : PdfSplitter(PdfDocument(PdfReader(src).setMemorySavingMode(true))) {
+            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {
                         val splitTempFile: File =
                             File.createTempFile("splitTempFile_" + partNumber++ + "_", ".pdf")
                         splitTempFilesList.add(splitTempFile)
-                        PdfWriter(splitTempFile)
+                        val pdfWriter = PdfWriter(splitTempFile)
+                        pdfWriter.setSmartMode(true)
+                        pdfWriter.compressionLevel = 9
+                        pdfWriter
                     } catch (ignored: FileNotFoundException) {
                         throw RuntimeException()
                     }
                 }
             }.splitByPageNumbers(
                 pageNumbers
-            ) { pdfDocument, _ -> pdfDocument.close() }
+            ) { pdfDocument, _ ->
+                pdfDocument.close()
+            }
+            readerPdfDocument.close()
         }
 
         val sourceTempFile: File = File.createTempFile("readerTempFile", ".pdf")
@@ -235,9 +250,11 @@ suspend fun getSplitPDFPathsByPageNumbers(
         println("Elapsed time in nanoseconds: ${end - begin}")
 
         splitPDFPaths = splitTempFilesPathsList
+
     }
 
     return splitPDFPaths
+
 }
 
 // For splitting pdf by list of page range.
@@ -264,15 +281,18 @@ suspend fun getSplitPDFPathsByPageRanges(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRanges: List<PageRange>) {
             yield()
-            val pdfDoc = PdfDocument(PdfReader(src).setMemorySavingMode(true))
-            val splitDocuments: List<PdfDocument> = object : PdfSplitter(pdfDoc) {
+            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val splitDocuments: List<PdfDocument> = object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {
                         val splitTempFile: File =
                             File.createTempFile("splitTempFile_" + partNumber++ + "_", ".pdf")
                         splitTempFilesList.add(splitTempFile)
-                        PdfWriter(splitTempFile)
+                        val pdfWriter = PdfWriter(splitTempFile)
+                        pdfWriter.setSmartMode(true)
+                        pdfWriter.compressionLevel = 9
+                        pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)
                     }
@@ -281,7 +301,7 @@ suspend fun getSplitPDFPathsByPageRanges(
             for (doc in splitDocuments) {
                 doc.close()
             }
-            pdfDoc.close()
+            readerPdfDocument.close()
         }
 
         val sourceTempFile: File = File.createTempFile("readerTempFile", ".pdf")
@@ -346,21 +366,24 @@ suspend fun getSplitPDFPathsByPageRange(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRange: PageRange) {
             yield()
-            val pdfDoc = PdfDocument(PdfReader(src).setMemorySavingMode(true))
-            val splitDocument: PdfDocument = object : PdfSplitter(pdfDoc) {
+            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val splitDocument: PdfDocument = object : PdfSplitter(readerPdfDocument) {
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {
                         val splitTempFile: File =
                             File.createTempFile("splitTempFile_" + 1 + "_", ".pdf")
                         splitTempFilesList.add(splitTempFile)
-                        PdfWriter(splitTempFile)
+                        val pdfWriter = PdfWriter(splitTempFile)
+                        pdfWriter.setSmartMode(true)
+                        pdfWriter.compressionLevel = 9
+                        pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)
                     }
                 }
             }.extractPageRange(pageRange)
             splitDocument.close()
-            pdfDoc.close()
+            readerPdfDocument.close()
         }
 
         val sourceTempFile: File = File.createTempFile("readerTempFile", ".pdf")

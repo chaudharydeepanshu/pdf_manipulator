@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -105,6 +106,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
     setState(() {
       _splitPDFPaths = result;
+
       _isBusy = false;
     });
   }
@@ -116,6 +118,62 @@ class _MyAppState extends State<MyApp> {
         _isBusy = true;
       });
       result = await _mergePdfsPlugin.pdfPageDeleter(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfPageReorder(PDFPageReorderParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfPageReorder(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfPageRotator(PDFPageRotatorParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfPageRotator(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfPageRotatorDeleterReorder(
+      PDFPageRotatorDeleterReorderParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result =
+          await _mergePdfsPlugin.pdfPageRotatorDeleterReorder(params: params);
       log(result.toString());
     } on PlatformException catch (e) {
       log(e.toString());
@@ -240,9 +298,11 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                          pdfUri: _pickedFilesPaths![0],
-                                          byteSize: 1000000,
-                                        );
+                                            pdfUri: _pickedFilesPaths![0],
+                                            byteSize: 12000000
+                                            // BigInt.from(1000).pow(3).toInt()
+                                            // BigInt.from(1000).pow(12).toInt(),
+                                            );
                                         await _splitPDF(params);
                                       },
                                 child: const Text("split(byte size)")),
@@ -356,7 +416,193 @@ class _MyAppState extends State<MyApp> {
                                     );
                                     await _fileSaver(params);
                                   },
-                            child: const Text("Save split pdfs")),
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("Reorder PDF pages"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFPageReorderParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pageNumbers: [4, 1],
+                                        );
+                                        await _pdfPageReorder(params);
+                                      },
+                                child: const Text("reorder pages")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("Rotate PDF pages"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFPageRotatorParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pagesRotationInfo: [
+                                            PageRotationInfo(
+                                                pageNumber: 1,
+                                                rotationAngle: 180)
+                                          ],
+                                        );
+                                        await _pdfPageRotator(params);
+                                      },
+                                child: const Text("rotate pages")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("Rotate, Delete, Reorder PDF pages"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params =
+                                            PDFPageRotatorDeleterReorderParams(
+                                          pdfUri: _pickedFilesPaths![0],
+                                          pagesRotationInfo: [
+                                            PageRotationInfo(
+                                                pageNumber: 1,
+                                                rotationAngle: 180)
+                                          ],
+                                          pageNumbersForReorder: [
+                                            4,
+                                            3,
+                                            2,
+                                            1,
+                                          ],
+                                          pageNumbersForDeleter: [3, 2],
+                                        );
+                                        await _pdfPageRotatorDeleterReorder(
+                                            params);
+                                      },
+                                child: const Text(
+                                    "Rotate, Delete, Reorder pages")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
                         OutlinedButton(
                             onPressed: () async {
                               await _cancelTask();
