@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -29,7 +28,7 @@ class _MyAppState extends State<MyApp> {
 
   bool _isBusy = false;
   final bool _localOnly = false;
-  final bool _copyFileToCacheDir = false;
+  final bool _copyFileToCacheDir = true;
   List<String>? _pickedFilesPaths;
   List<String>? _savedFilePath;
 
@@ -233,7 +232,7 @@ class _MyAppState extends State<MyApp> {
                                 ? null
                                 : () async {
                                     final params = PDFMergerParams(
-                                      pdfsUris: _pickedFilesPaths!,
+                                      pdfsPaths: _pickedFilesPaths!,
                                     );
                                     await _mergePDFs(params);
                                   },
@@ -287,7 +286,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageCount: 1,
                                         );
                                         await _splitPDF(params);
@@ -298,7 +297,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                            pdfUri: _pickedFilesPaths![0],
+                                            pdfPath: _pickedFilesPaths![0],
                                             byteSize: 12000000
                                             // BigInt.from(1000).pow(3).toInt()
                                             // BigInt.from(1000).pow(12).toInt(),
@@ -315,7 +314,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageNumbers: [2, 10],
                                         );
                                         await _splitPDF(params);
@@ -326,7 +325,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageRanges: ["2", "10-15"],
                                         );
                                         await _splitPDF(params);
@@ -342,7 +341,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFSplitterParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageRange: "2, 10-11, 3",
                                         );
                                         await _splitPDF(params);
@@ -398,7 +397,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFPageDeleterParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageNumbers: [1, 2, 3],
                                         );
                                         await _pdfPageDeleter(params);
@@ -454,7 +453,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFPageReorderParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pageNumbers: [4, 1],
                                         );
                                         await _pdfPageReorder(params);
@@ -510,7 +509,7 @@ class _MyAppState extends State<MyApp> {
                                     ? null
                                     : () async {
                                         final params = PDFPageRotatorParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pagesRotationInfo: [
                                             PageRotationInfo(
                                                 pageNumber: 1,
@@ -571,7 +570,7 @@ class _MyAppState extends State<MyApp> {
                                     : () async {
                                         final params =
                                             PDFPageRotatorDeleterReorderParams(
-                                          pdfUri: _pickedFilesPaths![0],
+                                          pdfPath: _pickedFilesPaths![0],
                                           pagesRotationInfo: [
                                             PageRotationInfo(
                                                 pageNumber: 1,

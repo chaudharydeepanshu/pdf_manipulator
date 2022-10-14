@@ -2,7 +2,6 @@ package com.deepanshuchaudhary.pdf_manipulator
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.net.Uri
 import androidx.core.net.toUri
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
@@ -13,7 +12,7 @@ import java.io.File
 
 // For removing pages from pdf.
 suspend fun getPDFPageDeleter(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageNumbers: List<Int>,
     context: Activity,
 ): String? {
@@ -28,7 +27,7 @@ suspend fun getPDFPageDeleter(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uri = Uri.parse(sourceFileUri)
+        val uri = Utils().getURI(sourceFilePath)
 
         val pdfReaderFile: File =
             File.createTempFile("readerTempFile", ".pdf")

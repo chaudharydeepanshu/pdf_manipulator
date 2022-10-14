@@ -21,11 +21,11 @@ class PdfManipulator(
     // For merging multiple pdf files.
     fun mergePdfs(
         result: MethodChannel.Result,
-        sourceFilesUris: List<String>?,
+        sourceFilesPaths: List<String>?,
     ) {
         Log.d(
             LOG_TAG,
-            "mergePdfs - IN, sourceFilesUris=$sourceFilesUris"
+            "mergePdfs - IN, sourceFilesPaths=$sourceFilesPaths"
         )
 
         if (!setPendingResult(result)) {
@@ -36,7 +36,7 @@ class PdfManipulator(
         val uiScope = CoroutineScope(Dispatchers.Main)
         job = uiScope.launch {
             try {
-                val mergedPDFPath: String? = getMergedPDFPath(sourceFilesUris!!, activity)
+                val mergedPDFPath: String? = getMergedPDFPath(sourceFilesPaths!!, activity)
 
                 finishMergeSuccessfully(mergedPDFPath)
             } catch (e: Exception) {
@@ -65,7 +65,7 @@ class PdfManipulator(
     // For merging multiple pdf files.
     fun splitPdf(
         result: MethodChannel.Result,
-        sourceFileUri: String?,
+        sourceFilePath: String?,
         pageCount: Int,
         byteSize: Number?,
         pageNumbers: List<Int>?,
@@ -74,7 +74,7 @@ class PdfManipulator(
     ) {
         Log.d(
             LOG_TAG,
-            "splitPdf - IN, sourceFileUri=$sourceFileUri, pageCount=$pageCount, byteSize=$byteSize, pageNumbers=$pageNumbers, pageRanges=$pageRanges, pageRange=$pageRange"
+            "splitPdf - IN, sourceFilePath=$sourceFilePath, pageCount=$pageCount, byteSize=$byteSize, pageNumbers=$pageNumbers, pageRanges=$pageRanges, pageRange=$pageRange"
         )
 
         if (!setPendingResult(result)) {
@@ -87,17 +87,17 @@ class PdfManipulator(
             try {
                 val splitPDFPaths: List<String>? = if (byteSize != null) {
                     getSplitPDFPathsByByteSize(
-                        sourceFileUri!!,
+                        sourceFilePath!!,
                         byteSize.toLong(), activity
                     )
                 } else if (pageNumbers != null) {
-                    getSplitPDFPathsByPageNumbers(sourceFileUri!!, pageNumbers, activity)
+                    getSplitPDFPathsByPageNumbers(sourceFilePath!!, pageNumbers, activity)
                 } else if (pageRanges != null) {
-                    getSplitPDFPathsByPageRanges(sourceFileUri!!, pageRanges, activity)
+                    getSplitPDFPathsByPageRanges(sourceFilePath!!, pageRanges, activity)
                 } else if (pageRange != null) {
-                    getSplitPDFPathsByPageRange(sourceFileUri!!, pageRange, activity)
+                    getSplitPDFPathsByPageRange(sourceFilePath!!, pageRange, activity)
                 } else {
-                    getSplitPDFPathsByPageCount(sourceFileUri!!, pageCount, activity)
+                    getSplitPDFPathsByPageCount(sourceFilePath!!, pageCount, activity)
                 }
                 finishSplitSuccessfully(splitPDFPaths)
             } catch (e: Exception) {
@@ -126,12 +126,12 @@ class PdfManipulator(
     // For removing pages from pdf.
     fun pdfPageDeleter(
         result: MethodChannel.Result,
-        sourceFileUri: String?,
+        sourceFilePath: String?,
         pageNumbers: List<Int>?,
     ) {
         Log.d(
             LOG_TAG,
-            "removePdfPages - IN, sourceFileUri=$sourceFileUri"
+            "removePdfPages - IN, sourceFilePath=$sourceFilePath"
         )
 
         if (!setPendingResult(result)) {
@@ -143,7 +143,7 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val resultPDFPath: String? =
-                    getPDFPageDeleter(sourceFileUri!!, pageNumbers!!, activity)
+                    getPDFPageDeleter(sourceFilePath!!, pageNumbers!!, activity)
 
                 finishMergeSuccessfully(resultPDFPath)
             } catch (e: Exception) {
@@ -172,12 +172,12 @@ class PdfManipulator(
     // For reordering pages of pdf.
     fun pdfPageReorder(
         result: MethodChannel.Result,
-        sourceFileUri: String?,
+        sourceFilePath: String?,
         pageNumbers: List<Int>?,
     ) {
         Log.d(
             LOG_TAG,
-            "pdfPageReorder - IN, sourceFileUri=$sourceFileUri"
+            "pdfPageReorder - IN, sourceFilePath=$sourceFilePath"
         )
 
         if (!setPendingResult(result)) {
@@ -189,7 +189,7 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val resultPDFPath: String? =
-                    getPDFPageReorder(sourceFileUri!!, pageNumbers!!, activity)
+                    getPDFPageReorder(sourceFilePath!!, pageNumbers!!, activity)
 
                 finishMergeSuccessfully(resultPDFPath)
             } catch (e: Exception) {
@@ -218,12 +218,12 @@ class PdfManipulator(
     // For rotating pages of pdf.
     fun pdfPageRotator(
         result: MethodChannel.Result,
-        sourceFileUri: String?,
+        sourceFilePath: String?,
         pagesRotationInfo: List<Map<String, Int>>?,
     ) {
         Log.d(
             LOG_TAG,
-            "pdfPageRotator - IN, sourceFileUri=$sourceFileUri"
+            "pdfPageRotator - IN, sourceFilePath=$sourceFilePath"
         )
 
         if (!setPendingResult(result)) {
@@ -245,7 +245,7 @@ class PdfManipulator(
                 }
 
                 val resultPDFPath: String? =
-                    getPDFPageRotator(sourceFileUri!!, newPagesRotationInfo, activity)
+                    getPDFPageRotator(sourceFilePath!!, newPagesRotationInfo, activity)
 
                 finishMergeSuccessfully(resultPDFPath)
             } catch (e: Exception) {
@@ -274,14 +274,14 @@ class PdfManipulator(
     // For reordering, deleting, rotating pages of pdf.
     fun pdfPageRotatorDeleterReorder(
         result: MethodChannel.Result,
-        sourceFileUri: String?,
+        sourceFilePath: String?,
         pageNumbersForReorder: List<Int>,
         pageNumbersForDeleter: List<Int>,
         pagesRotationInfo: List<Map<String, Int>>,
     ) {
         Log.d(
             LOG_TAG,
-            "pdfPageRotatorDeleterReorder - IN, sourceFileUri=$sourceFileUri"
+            "pdfPageRotatorDeleterReorder - IN, sourceFilePath=$sourceFilePath"
         )
 
         if (!setPendingResult(result)) {
@@ -294,7 +294,7 @@ class PdfManipulator(
             try {
                 val newPagesRotationInfo: MutableList<PageRotationInfo> = mutableListOf()
 
-                pagesRotationInfo!!.forEach {
+                pagesRotationInfo.forEach {
                     val temp = PageRotationInfo(
                         pageNumber = it["pageNumber"]!!,
                         rotationAngle = it["rotationAngle"]!!
@@ -303,7 +303,13 @@ class PdfManipulator(
                 }
 
                 val resultPDFPath: String? =
-                    getPDFPageRotatorDeleterReorder(sourceFileUri!!,pageNumbersForReorder!!, pageNumbersForDeleter!!,  newPagesRotationInfo, activity)
+                    getPDFPageRotatorDeleterReorder(
+                        sourceFilePath!!,
+                        pageNumbersForReorder,
+                        pageNumbersForDeleter,
+                        newPagesRotationInfo,
+                        activity
+                    )
 
                 finishMergeSuccessfully(resultPDFPath)
             } catch (e: Exception) {

@@ -121,14 +121,14 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         when (call.method) {
             "mergePDFs" -> pdfManipulator!!.mergePdfs(
                 result,
-                sourceFilesUris = parseMethodCallArrayOfStringArgument(
+                sourceFilesPaths = parseMethodCallArrayOfStringArgument(
                     call,
-                    "pdfsUris"
+                    "pdfsPaths"
                 ),
             )
             "splitPDF" -> pdfManipulator!!.splitPdf(
                 result,
-                sourceFileUri = call.argument("pdfUri"),
+                sourceFilePath = call.argument("pdfPath"),
                 pageCount = call.argument("pageCount") ?: 1,
                 byteSize = call.argument("byteSize"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
@@ -143,7 +143,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             )
             "pdfPageDeleter" -> pdfManipulator!!.pdfPageDeleter(
                 result,
-                sourceFileUri = call.argument("pdfUri"),
+                sourceFilePath = call.argument("pdfPath"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
                     call,
                     "pageNumbers"
@@ -151,7 +151,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             )
             "pdfPageReorder" -> pdfManipulator!!.pdfPageReorder(
                 result,
-                sourceFileUri = call.argument("pdfUri"),
+                sourceFilePath = call.argument("pdfPath"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
                     call,
                     "pageNumbers"
@@ -159,7 +159,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             )
             "pdfPageRotator" -> pdfManipulator!!.pdfPageRotator(
                 result,
-                sourceFileUri = call.argument("pdfUri"),
+                sourceFilePath = call.argument("pdfPath"),
                 pagesRotationInfo = parseMethodCallArrayOfMapArgument(
                     call,
                     "pagesRotationInfo"
@@ -167,7 +167,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             )
             "pdfPageRotatorDeleterReorder" -> pdfManipulator!!.pdfPageRotatorDeleterReorder(
                 result,
-                sourceFileUri = call.argument("pdfUri"),
+                sourceFilePath = call.argument("pdfPath"),
                 pageNumbersForReorder = parseMethodCallArrayOfIntArgument(
                     call,
                     "pageNumbersForReorder"

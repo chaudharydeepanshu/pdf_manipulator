@@ -2,7 +2,6 @@ package com.deepanshuchaudhary.pdf_manipulator
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.net.Uri
 import androidx.core.net.toUri
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
@@ -19,7 +18,7 @@ import java.io.IOException
 
 // For splitting pdf by page count.
 suspend fun getSplitPDFPathsByPageCount(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageCount: Int,
     context: Activity,
 ): List<String>? {
@@ -34,9 +33,11 @@ suspend fun getSplitPDFPathsByPageCount(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uriForFileToSplit = Uri.parse(sourceFileUri)
+        val uriForFileToSplit = Utils().getURI(sourceFilePath)
 
         val splitTempFilesList: MutableList<File> = mutableListOf()
+
+        val pdfWritersList: MutableList<PdfWriter> = mutableListOf()
 
         // https://kb.itextpdf.com/home/it7kb/faq/volume-counter-faqs example converted from java to kotlin
         @Throws(IOException::class)
@@ -53,6 +54,10 @@ suspend fun getSplitPDFPathsByPageCount(
                         val pdfWriter = PdfWriter(splitTempFile)
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
+                        pdfWritersList.add(pdfWriter)
+                        pdfWritersList.forEach { pdfWriter ->
+                            pdfWriter.flush()
+                        }
                         pdfWriter
                     } catch (ignored: FileNotFoundException) {
                         throw RuntimeException()
@@ -99,7 +104,7 @@ suspend fun getSplitPDFPathsByPageCount(
 
 // For splitting pdf by byte size.
 suspend fun getSplitPDFPathsByByteSize(
-    sourceFileUri: String,
+    sourceFilePath: String,
     byteSize: Long,
     context: Activity,
 ): List<String>? {
@@ -114,9 +119,11 @@ suspend fun getSplitPDFPathsByByteSize(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uriForFileToSplit = Uri.parse(sourceFileUri)
+        val uriForFileToSplit = Utils().getURI(sourceFilePath)
 
         val splitTempFilesList: MutableList<File> = mutableListOf()
+
+        val pdfWritersList: MutableList<PdfWriter> = mutableListOf()
 
         // https://kb.itextpdf.com/home/it7kb/examples/splitting-a-pdf-file example converted from java to kotlin
         @Throws(IOException::class)
@@ -133,6 +140,10 @@ suspend fun getSplitPDFPathsByByteSize(
                         val pdfWriter = PdfWriter(splitTempFile)
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
+                        pdfWritersList.add(pdfWriter)
+                        pdfWritersList.forEach { pdfWriter ->
+                            pdfWriter.flush()
+                        }
                         pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)
@@ -178,7 +189,7 @@ suspend fun getSplitPDFPathsByByteSize(
 
 // For splitting pdf by page numbers.
 suspend fun getSplitPDFPathsByPageNumbers(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageNumbers: List<Int>,
     context: Activity,
 ): List<String>? {
@@ -193,9 +204,11 @@ suspend fun getSplitPDFPathsByPageNumbers(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uriForFileToSplit = Uri.parse(sourceFileUri)
+        val uriForFileToSplit = Utils().getURI(sourceFilePath)
 
         val splitTempFilesList: MutableList<File> = mutableListOf()
+
+        val pdfWritersList: MutableList<PdfWriter> = mutableListOf()
 
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageNumbers: List<Int>) {
@@ -211,6 +224,10 @@ suspend fun getSplitPDFPathsByPageNumbers(
                         val pdfWriter = PdfWriter(splitTempFile)
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
+                        pdfWritersList.add(pdfWriter)
+                        pdfWritersList.forEach { pdfWriter ->
+                            pdfWriter.flush()
+                        }
                         pdfWriter
                     } catch (ignored: FileNotFoundException) {
                         throw RuntimeException()
@@ -259,7 +276,7 @@ suspend fun getSplitPDFPathsByPageNumbers(
 
 // For splitting pdf by list of page range.
 suspend fun getSplitPDFPathsByPageRanges(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageRanges: List<String>,
     context: Activity,
 ): List<String>? {
@@ -274,9 +291,11 @@ suspend fun getSplitPDFPathsByPageRanges(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uriForFileToSplit = Uri.parse(sourceFileUri)
+        val uriForFileToSplit = Utils().getURI(sourceFilePath)
 
         val splitTempFilesList: MutableList<File> = mutableListOf()
+
+        val pdfWritersList: MutableList<PdfWriter> = mutableListOf()
 
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRanges: List<PageRange>) {
@@ -292,6 +311,10 @@ suspend fun getSplitPDFPathsByPageRanges(
                         val pdfWriter = PdfWriter(splitTempFile)
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
+                        pdfWritersList.add(pdfWriter)
+                        pdfWritersList.forEach { pdfWriter ->
+                            pdfWriter.flush()
+                        }
                         pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)
@@ -344,7 +367,7 @@ suspend fun getSplitPDFPathsByPageRanges(
 
 // For splitting pdf by page range.
 suspend fun getSplitPDFPathsByPageRange(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageRange: String,
     context: Activity,
 ): List<String>? {
@@ -359,9 +382,11 @@ suspend fun getSplitPDFPathsByPageRange(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uriForFileToSplit = Uri.parse(sourceFileUri)
+        val uriForFileToSplit = Utils().getURI(sourceFilePath)
 
         val splitTempFilesList: MutableList<File> = mutableListOf()
+
+        val pdfWritersList: MutableList<PdfWriter> = mutableListOf()
 
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRange: PageRange) {
@@ -376,6 +401,10 @@ suspend fun getSplitPDFPathsByPageRange(
                         val pdfWriter = PdfWriter(splitTempFile)
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
+                        pdfWritersList.add(pdfWriter)
+                        pdfWritersList.forEach { pdfWriter ->
+                            pdfWriter.flush()
+                        }
                         pdfWriter
                     } catch (e: FileNotFoundException) {
                         throw RuntimeException(e)

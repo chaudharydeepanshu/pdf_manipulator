@@ -2,7 +2,6 @@ package com.deepanshuchaudhary.pdf_manipulator
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.net.Uri
 import androidx.core.net.toUri
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
@@ -13,7 +12,7 @@ import java.io.File
 
 // For reordering, deleting, rotating pages of pdf.
 suspend fun getPDFPageRotatorDeleterReorder(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pageNumbersForReorder: List<Int>,
     pageNumbersForDeleter: List<Int>,
     pagesRotationInfo: List<PageRotationInfo>,
@@ -30,7 +29,7 @@ suspend fun getPDFPageRotatorDeleterReorder(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uri = Uri.parse(sourceFileUri)
+        val uri = Utils().getURI(sourceFilePath)
 
         val pdfReaderFile: File =
             File.createTempFile("readerTempFile", ".pdf")

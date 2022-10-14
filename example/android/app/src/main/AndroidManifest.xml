@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deepanshuchaudhary.pdf_manipulator_example">
    <application
+        android:largeHeap="true"
         android:label="pdf_manipulator_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

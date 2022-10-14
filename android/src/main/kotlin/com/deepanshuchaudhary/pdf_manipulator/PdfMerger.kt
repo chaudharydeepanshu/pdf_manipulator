@@ -17,7 +17,7 @@ import java.io.File
 
 // For merging multiple pdf files.
 suspend fun getMergedPDFPath(
-    sourceFilesUris: List<String>,
+    sourceFilesPaths: List<String>,
     context: Activity,
 ): String? {
 
@@ -34,9 +34,9 @@ suspend fun getMergedPDFPath(
         val contentResolver: ContentResolver = context.contentResolver
 
         val tempListOfUrisForFilesToMerge: MutableList<Uri> = mutableListOf()
-        sourceFilesUris.indices.map { index ->
+        sourceFilesPaths.indices.map { index ->
             yield()
-            val uri = Uri.parse(sourceFilesUris.elementAt(index))
+            val uri = Utils().getURI(sourceFilesPaths.elementAt(index))
             tempListOfUrisForFilesToMerge.add(uri)
         }
 

@@ -70,6 +70,14 @@ class Utils {
         }
     }
 
+    fun getURI(uri: String): Uri {
+        val parsed: Uri = Uri.parse(uri)
+        val parsedScheme: String? = parsed.scheme
+        return if ((parsedScheme == null) || parsedScheme.isEmpty()) {
+            Uri.fromFile(File(uri))
+        } else parsed
+    }
+
 //    fun clearPDFFilesFromCache(context: Activity) {
 //        val cacheDir: File = context.cacheDir
 //        if (cacheDir.exists()) {

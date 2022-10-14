@@ -2,7 +2,6 @@ package com.deepanshuchaudhary.pdf_manipulator
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.net.Uri
 import androidx.core.net.toUri
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
@@ -15,7 +14,7 @@ data class PageRotationInfo(var pageNumber: Int, val rotationAngle: Int)
 
 // For rotating pages of pdf.
 suspend fun getPDFPageRotator(
-    sourceFileUri: String,
+    sourceFilePath: String,
     pagesRotationInfo: List<PageRotationInfo>,
     context: Activity,
 ): String? {
@@ -30,7 +29,7 @@ suspend fun getPDFPageRotator(
 
         val contentResolver: ContentResolver = context.contentResolver
 
-        val uri = Uri.parse(sourceFileUri)
+        val uri = Utils().getURI(sourceFilePath)
 
         val pdfReaderFile: File =
             File.createTempFile("readerTempFile", ".pdf")
