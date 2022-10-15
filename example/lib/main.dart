@@ -658,8 +658,8 @@ class _MyAppState extends State<MyApp> {
                                     : () async {
                                         final params = PDFCompressorParams(
                                           pdfPath: _pickedFilesPaths![0],
-                                          imageQuality: 80,
-                                          imageScale: 0.9,
+                                          imageQuality: 100,
+                                          imageScale: 1,
                                         );
                                         await _pdfCompressor(params);
                                       },

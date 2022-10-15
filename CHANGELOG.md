@@ -1,3 +1,7 @@
+## 0.3.2
+
+* Added `unEmbedFonts` for `pdfCompressor`.
+
 ## 0.3.1
 
 * Added `pdfCompressor` method for compressing pdf.

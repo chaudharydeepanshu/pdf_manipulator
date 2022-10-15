@@ -115,7 +115,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.1"
+    version: "0.3.2"
   pick_or_save:
     dependency: "direct main"
     description:

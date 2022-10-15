@@ -15,11 +15,12 @@ import kotlinx.coroutines.yield
 import java.io.File
 
 
-// For merging multiple pdf files.
+// For compressing pdf.
 suspend fun getCompressedPDFPath(
     sourceFilePath: String,
     imageQuality: Int,
     imageScale: Double,
+    unEmbedFonts: Boolean,
     context: Activity,
 ): String? {
 
@@ -70,7 +71,7 @@ suspend fun getCompressedPDFPath(
                     continue
                 }
 
-                var stream: PdfStream = pdfObject as PdfStream
+                val stream: PdfStream = pdfObject as PdfStream
 
                 if (PdfName.Image != stream.getAsName(PdfName.Subtype)) {
                     continue
@@ -130,6 +131,25 @@ suspend fun getCompressedPDFPath(
 
         reduceImagesSize(imageScale, imageQuality)
 
+        suspend fun removeFont() {
+            for (i in 0 until pdfDocument.numberOfPdfObjects) {
+                yield()
+                val obj: PdfObject? = pdfDocument.getPdfObject(i)
+
+                // Skip all objects that aren't a dictionary
+                if ((obj == null) || !obj.isDictionary) {
+                    continue
+                }
+
+                // Process all dictionaries
+                unembedTTF((obj as PdfDictionary))
+            }
+        }
+
+        if (unEmbedFonts) {
+            removeFont()
+        }
+
         pdfDocument.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
@@ -162,4 +182,31 @@ fun resetImageStream(
     stream.put(PdfName.Height, PdfNumber(imgHeight))
     stream.put(PdfName.BitsPerComponent, PdfNumber(8))
     stream.put(PdfName.ColorSpace, PdfName.DeviceRGB)
+}
+
+fun unembedTTF(dict: PdfDictionary) {
+
+    // Ignore all dictionaries that aren't font dictionaries
+    if (PdfName.Font != dict.getAsName(PdfName.Type)) {
+        return
+    }
+
+    // Only TTF fonts should be removed
+    if (dict.getAsDictionary(PdfName.FontFile2) != null) {
+        return
+    }
+
+    // Check if a subset was used (in which case we remove the prefix)
+    var baseFont = dict.getAsName(PdfName.BaseFont)
+    if (baseFont.value.toByteArray()[6] == '+'.code.toByte()) {
+        baseFont = PdfName(baseFont.value.substring(7))
+        dict.put(PdfName.BaseFont, baseFont)
+    }
+
+    // Check if there's a font descriptor
+    val fontDescriptor = dict.getAsDictionary(PdfName.FontDescriptor) ?: return
+
+    // Replace the font name and remove the font file
+    fontDescriptor.put(PdfName.FontName, baseFont)
+    fontDescriptor.remove(PdfName.FontFile2)
 }

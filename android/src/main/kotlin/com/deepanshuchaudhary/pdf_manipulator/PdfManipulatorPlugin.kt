@@ -186,6 +186,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 sourceFilePath = call.argument("pdfPath"),
                 imageQuality = call.argument("imageQuality"),
                 imageScale = call.argument("imageScale"),
+                unEmbedFonts = call.argument("unEmbedFonts"),
             )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()

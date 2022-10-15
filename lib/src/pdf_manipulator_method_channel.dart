@@ -270,17 +270,22 @@ class PDFCompressorParams {
   /// Provide path of pdf file which should be compressed.
   final double imageScale;
 
+  /// Provide true to unEmbed all fonts to decrease size further.
+  final bool unEmbedFonts;
+
   /// Create parameters for the [pdfCompressor] method.
   const PDFCompressorParams(
       {required this.pdfPath,
       required this.imageQuality,
-      required this.imageScale});
+      required this.imageScale,
+      this.unEmbedFonts = false});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'pdfPath': pdfPath,
       'imageQuality': imageQuality,
       'imageScale': imageScale,
+      'unEmbedFonts': unEmbedFonts,
     };
   }
 }

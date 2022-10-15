@@ -342,6 +342,7 @@ class PdfManipulator(
         sourceFilePath: String?,
         imageQuality: Int?,
         imageScale: Double?,
+        unEmbedFonts: Boolean?,
     ) {
         Log.d(
             LOG_TAG,
@@ -361,6 +362,7 @@ class PdfManipulator(
                         sourceFilePath!!,
                         imageQuality!!,
                         imageScale!!,
+                        unEmbedFonts!!,
                         activity
                     )
 
