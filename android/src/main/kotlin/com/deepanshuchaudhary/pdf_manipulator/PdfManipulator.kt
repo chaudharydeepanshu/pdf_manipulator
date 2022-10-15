@@ -38,7 +38,7 @@ class PdfManipulator(
             try {
                 val mergedPDFPath: String? = getMergedPDFPath(sourceFilesPaths!!, activity)
 
-                finishMergeSuccessfully(mergedPDFPath)
+                finishSuccessfullyWithSinglePath(mergedPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "mergePdfs_exception",
@@ -99,7 +99,7 @@ class PdfManipulator(
                 } else {
                     getSplitPDFPathsByPageCount(sourceFilePath!!, pageCount, activity)
                 }
-                finishSplitSuccessfully(splitPDFPaths)
+                finishSplitSuccessfullyWithListOfPaths(splitPDFPaths)
             } catch (e: Exception) {
                 finishWithError(
                     "splitPdf_exception",
@@ -145,7 +145,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageDeleter(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishMergeSuccessfully(resultPDFPath)
+                finishSuccessfullyWithSinglePath(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "removePdfPages_exception",
@@ -191,7 +191,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageReorder(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishMergeSuccessfully(resultPDFPath)
+                finishSuccessfullyWithSinglePath(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageReorder_exception",
@@ -247,7 +247,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageRotator(sourceFilePath!!, newPagesRotationInfo, activity)
 
-                finishMergeSuccessfully(resultPDFPath)
+                finishSuccessfullyWithSinglePath(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageRotator_exception",
@@ -311,7 +311,7 @@ class PdfManipulator(
                         activity
                     )
 
-                finishMergeSuccessfully(resultPDFPath)
+                finishSuccessfullyWithSinglePath(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageRotatorDeleterReorder_exception",
@@ -333,6 +333,59 @@ class PdfManipulator(
             }
         }
         Log.d(LOG_TAG, "pdfPageRotatorDeleterReorder - OUT")
+    }
+
+
+    // For compressing pdf.
+    fun pdfCompressor(
+        result: MethodChannel.Result,
+        sourceFilePath: String?,
+        imageQuality: Int?,
+        imageScale: Double?,
+    ) {
+        Log.d(
+            LOG_TAG,
+            "pdfCompressor - IN, sourceFilePath=$sourceFilePath"
+        )
+
+        if (!setPendingResult(result)) {
+            finishWithAlreadyActiveError(result)
+            return
+        }
+
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        job = uiScope.launch {
+            try {
+                val resultPDFPath: String? =
+                    getCompressedPDFPath(
+                        sourceFilePath!!,
+                        imageQuality!!,
+                        imageScale!!,
+                        activity
+                    )
+
+                finishSuccessfullyWithSinglePath(resultPDFPath)
+            } catch (e: Exception) {
+                finishWithError(
+                    "pdfCompressor_exception",
+                    e.stackTraceToString(),
+                    null
+                )
+//            withContext(Dispatchers.IO) {
+//                clearPDFFilesFromCache(context = activity)
+//            }
+            } catch (e: OutOfMemoryError) {
+                finishWithError(
+                    "pdfCompressor_OutOfMemoryError",
+                    e.stackTraceToString(),
+                    null
+                )
+//            withContext(Dispatchers.IO) {
+//                clearPDFFilesFromCache(context = activity)
+//            }
+            }
+        }
+        Log.d(LOG_TAG, "pdfCompressor - OUT")
     }
 
     fun cancelManipulations(
@@ -361,12 +414,12 @@ class PdfManipulator(
         pendingResult = null
     }
 
-    private fun finishMergeSuccessfully(result: String?) {
+    private fun finishSuccessfullyWithSinglePath(result: String?) {
         pendingResult?.success(result)
         clearPendingResult()
     }
 
-    private fun finishSplitSuccessfully(result: List<String>?) {
+    private fun finishSplitSuccessfullyWithListOfPaths(result: List<String>?) {
         pendingResult?.success(result)
         clearPendingResult()
     }

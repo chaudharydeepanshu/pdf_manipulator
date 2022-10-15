@@ -1,3 +1,7 @@
+## 0.3.1
+
+* Added `pdfCompressor` method for compressing pdf.
+ 
 ## 0.2.2
 
 * Fixes OOfM error in some cases.

@@ -53,6 +53,13 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<String?> pdfCompressor({PDFCompressorParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfCompressor', params?.toJson());
+    return path;
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -248,6 +255,32 @@ class PDFPageRotatorDeleterReorderParams {
       'pagesRotationInfo': pagesRotationInfo?.map((e) => e.toJson()).toList(),
       'pageNumbersForDeleter': pageNumbersForDeleter,
       'pageNumbersForReorder': pageNumbersForReorder,
+    };
+  }
+}
+
+/// Parameters for the [pdfCompressor] method.
+class PDFCompressorParams {
+  /// Provide path of pdf file which should be compressed.
+  final String pdfPath;
+
+  /// Provide path of pdf file which should be compressed.
+  final int imageQuality;
+
+  /// Provide path of pdf file which should be compressed.
+  final double imageScale;
+
+  /// Create parameters for the [pdfCompressor] method.
+  const PDFCompressorParams(
+      {required this.pdfPath,
+      required this.imageQuality,
+      required this.imageScale});
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
+      'imageQuality': imageQuality,
+      'imageScale': imageScale,
     };
   }
 }

@@ -14,6 +14,7 @@ Note: This package is uses iText7(AGPL LICENSE) for providing pdf manipulations.
 - Delete pdf pages.
 - Reorder pdf pages.
 - Rotate, Delete, Reorder pdf pages at the same time for more efficiency.
+- Compress pdf.
 
 ## Getting started
 

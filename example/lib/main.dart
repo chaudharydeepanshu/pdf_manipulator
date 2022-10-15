@@ -184,6 +184,24 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _pdfCompressor(PDFCompressorParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfCompressor(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
   Future<void> _cancelTask() async {
     String? result;
     try {
@@ -589,6 +607,63 @@ class _MyAppState extends State<MyApp> {
                                       },
                                 child: const Text(
                                     "Rotate, Delete, Reorder pages")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("PDF Compressor"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFCompressorParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                          imageQuality: 80,
+                                          imageScale: 0.9,
+                                        );
+                                        await _pdfCompressor(params);
+                                      },
+                                child: const Text("Compress")),
                           ],
                         ),
                         OutlinedButton(

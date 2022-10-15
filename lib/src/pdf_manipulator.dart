@@ -52,6 +52,14 @@ class PdfManipulator {
         .pdfPageRotatorDeleterReorder(params: params);
   }
 
+  /// Compresses provided pdf file.
+  ///
+  /// Returns the path or uri of the resultant file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<String?> pdfCompressor({PDFCompressorParams? params}) {
+    return PdfManipulatorPlatform.instance.pdfCompressor(params: params);
+  }
+
   /// Cancels running manipulations.
   ///
   /// Returns the cancelling message.

@@ -181,6 +181,12 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "pagesRotationInfo"
                 ) ?: listOf(),
             )
+            "pdfCompressor" -> pdfManipulator!!.pdfCompressor(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
+                imageQuality = call.argument("imageQuality"),
+                imageScale = call.argument("imageScale"),
+            )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
         }
