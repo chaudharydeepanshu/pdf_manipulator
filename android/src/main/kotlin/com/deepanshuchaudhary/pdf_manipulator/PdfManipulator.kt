@@ -45,18 +45,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "mergePdfs_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "mergePdfs - OUT")
@@ -106,18 +100,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "splitPdf_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "splitPdf - OUT")
@@ -152,18 +140,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "removePdfPages_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "removePdfPages - OUT")
@@ -198,18 +180,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "pdfPageReorder_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "pdfPageReorder - OUT")
@@ -254,18 +230,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "pdfPageRotator_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "pdfPageRotator - OUT")
@@ -318,18 +288,12 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "pdfPageRotatorDeleterReorder_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             }
         }
         Log.d(LOG_TAG, "pdfPageRotatorDeleterReorder - OUT")
@@ -373,18 +337,66 @@ class PdfManipulator(
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
             } catch (e: OutOfMemoryError) {
                 finishWithError(
                     "pdfCompressor_OutOfMemoryError",
                     e.stackTraceToString(),
                     null
                 )
-//            withContext(Dispatchers.IO) {
-//                clearPDFFilesFromCache(context = activity)
-//            }
+            }
+        }
+        Log.d(LOG_TAG, "pdfCompressor - OUT")
+    }
+
+    // For compressing pdf.
+    fun watermarkPdf(
+        result: MethodChannel.Result,
+        sourceFilePath: String?,
+        text: String?,
+        fontSize: Double?,
+        watermarkLayer: WatermarkLayer?,
+        opacity: Double?,
+        rotationAngle: Double?,
+        watermarkColor: String?,
+    ) {
+        Log.d(
+            LOG_TAG,
+            "pdfCompressor - IN, sourceFilePath=$sourceFilePath"
+        )
+
+        if (!setPendingResult(result)) {
+            finishWithAlreadyActiveError(result)
+            return
+        }
+
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        job = uiScope.launch {
+            try {
+                val resultPDFPath: String? =
+                    getWatermarkedPDFPath(
+                        sourceFilePath!!,
+                        text!!,
+                        fontSize!!,
+                        watermarkLayer!!,
+                        opacity!!,
+                        rotationAngle!!,
+                        watermarkColor!!,
+                        activity
+                    )
+
+                finishSuccessfullyWithSinglePath(resultPDFPath)
+            } catch (e: Exception) {
+                finishWithError(
+                    "pdfCompressor_exception",
+                    e.stackTraceToString(),
+                    null
+                )
+            } catch (e: OutOfMemoryError) {
+                finishWithError(
+                    "pdfCompressor_OutOfMemoryError",
+                    e.stackTraceToString(),
+                    null
+                )
             }
         }
         Log.d(LOG_TAG, "pdfCompressor - OUT")

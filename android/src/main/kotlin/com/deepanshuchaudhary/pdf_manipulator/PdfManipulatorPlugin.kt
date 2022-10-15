@@ -188,6 +188,17 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 imageScale = call.argument("imageScale"),
                 unEmbedFonts = call.argument("unEmbedFonts"),
             )
+            "pdfWatermark" -> pdfManipulator!!.watermarkPdf(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
+                text = call.argument("text"),
+                fontSize = call.argument("fontSize"),
+                watermarkLayer = parseMethodCallWatermarkLayerTypeArgument(call)
+                    ?: WatermarkLayer.OverContent,
+                opacity = call.argument("opacity"),
+                rotationAngle = call.argument("rotationAngle"),
+                watermarkColor = call.argument("watermarkColor"),
+            )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
         }
@@ -235,6 +246,18 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     ): List<Map<String, Int>>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<Map<String, Int>>>(arg)?.toList()
+        }
+        return null
+    }
+
+    private fun parseMethodCallWatermarkLayerTypeArgument(call: MethodCall): WatermarkLayer? {
+        val arg = "watermarkLayer"
+        if (call.hasArgument(arg)) {
+            return if (call.argument<String>(arg)?.toString() == "WatermarkLayer.underContent") {
+                WatermarkLayer.UnderContent
+            } else {
+                WatermarkLayer.OverContent
+            }
         }
         return null
     }

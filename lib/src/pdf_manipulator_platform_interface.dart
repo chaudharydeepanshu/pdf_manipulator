@@ -53,6 +53,10 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('pdfCompressor() has not been implemented.');
   }
 
+  Future<String?> pdfWatermark({PDFWatermarkParams? params}) {
+    throw UnimplementedError('pdfWatermark() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

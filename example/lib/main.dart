@@ -184,6 +184,24 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _pdfWatermark(PDFWatermarkParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfWatermark(params: params);
+      log(result.toString());
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
   Future<void> _pdfCompressor(PDFCompressorParams params) async {
     String? result;
     try {
@@ -664,6 +682,67 @@ class _MyAppState extends State<MyApp> {
                                         await _pdfCompressor(params);
                                       },
                                 child: const Text("Compress")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("PDF Watermark"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFWatermarkParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                          text: "LOL Lol Watermark",
+                                          watermarkColor: Colors.red,
+                                          fontSize: 50,
+                                          watermarkLayer:
+                                              WatermarkLayer.overContent,
+                                          opacity: 0.7,
+                                        );
+                                        await _pdfWatermark(params);
+                                      },
+                                child: const Text("Watermark")),
                           ],
                         ),
                         OutlinedButton(

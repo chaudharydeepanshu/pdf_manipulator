@@ -1,3 +1,7 @@
+## 0.4.1
+
+* Added `pdfWatermark` method for watermarking pdf.
+
 ## 0.3.2
 
 * Added `unEmbedFonts` for `pdfCompressor`.

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'pdf_manipulator_platform_interface.dart';
@@ -56,6 +56,13 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   Future<String?> pdfCompressor({PDFCompressorParams? params}) async {
     final String? path = await methodChannel.invokeMethod<String?>(
         'pdfCompressor', params?.toJson());
+    return path;
+  }
+
+  @override
+  Future<String?> pdfWatermark({PDFWatermarkParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfWatermark', params?.toJson());
     return path;
   }
 
@@ -286,6 +293,55 @@ class PDFCompressorParams {
       'imageQuality': imageQuality,
       'imageScale': imageScale,
       'unEmbedFonts': unEmbedFonts,
+    };
+  }
+}
+
+enum WatermarkLayer { underContent, overContent }
+
+/// Parameters for the [pdfWatermark] method.
+class PDFWatermarkParams {
+  /// Provide path of pdf file which should be compressed.
+  final String pdfPath;
+
+  /// Provide watermark text.
+  final String text;
+
+  /// Provide watermark text font size.
+  final double fontSize;
+
+  /// Provide layer for watermark printing like over or under content.
+  final WatermarkLayer watermarkLayer;
+
+  /// Provide watermark text opacity.
+  final double opacity;
+
+  /// Provide watermark text rotation Angle.
+  final double rotationAngle;
+
+  /// Provide watermark text color.
+  final Color watermarkColor;
+
+  /// Create parameters for the [pdfWatermark] method.
+  const PDFWatermarkParams({
+    required this.pdfPath,
+    required this.text,
+    this.fontSize = 30,
+    this.watermarkLayer = WatermarkLayer.overContent,
+    this.opacity = 0.5,
+    this.rotationAngle = 45,
+    this.watermarkColor = Colors.black,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
+      'text': text,
+      'fontSize': fontSize,
+      'watermarkLayer': watermarkLayer.toString(),
+      'opacity': opacity,
+      'rotationAngle': rotationAngle,
+      'watermarkColor': '#${watermarkColor.value.toRadixString(16)}',
     };
   }
 }

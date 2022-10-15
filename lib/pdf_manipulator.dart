@@ -9,4 +9,6 @@ export 'src/pdf_manipulator_method_channel.dart'
         PDFPageRotatorParams,
         PageRotationInfo,
         PDFPageRotatorDeleterReorderParams,
-        PDFCompressorParams;
+        PDFCompressorParams,
+        PDFWatermarkParams,
+        WatermarkLayer;

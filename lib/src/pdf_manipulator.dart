@@ -60,6 +60,14 @@ class PdfManipulator {
     return PdfManipulatorPlatform.instance.pdfCompressor(params: params);
   }
 
+  /// Watermarks provided pdf file.
+  ///
+  /// Returns the path or uri of the resultant file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<String?> pdfWatermark({PDFWatermarkParams? params}) {
+    return PdfManipulatorPlatform.instance.pdfWatermark(params: params);
+  }
+
   /// Cancels running manipulations.
   ///
   /// Returns the cancelling message.

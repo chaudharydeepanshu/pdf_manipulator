@@ -63,7 +63,7 @@ suspend fun getCompressedPDFPath(
             for (indRef in pdfDocument.listIndirectReferences()) {
                 yield()
 
-                // Get a direct object and try to resolve indirects chain.
+                // Get a direct object and try to resolve indirect chain.
                 // Note: If chain of references has length of more than 32,
                 // this method return 31st reference in chain.
                 val pdfObject: PdfObject? = indRef.refersTo
@@ -142,7 +142,7 @@ suspend fun getCompressedPDFPath(
                 }
 
                 // Process all dictionaries
-                unembedTTF((obj as PdfDictionary))
+                unEmbedTTF((obj as PdfDictionary))
             }
         }
 
@@ -184,7 +184,7 @@ fun resetImageStream(
     stream.put(PdfName.ColorSpace, PdfName.DeviceRGB)
 }
 
-fun unembedTTF(dict: PdfDictionary) {
+fun unEmbedTTF(dict: PdfDictionary) {
 
     // Ignore all dictionaries that aren't font dictionaries
     if (PdfName.Font != dict.getAsName(PdfName.Type)) {
