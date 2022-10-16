@@ -67,6 +67,28 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<List<PageSizeInfo>?> pdfPagesSize({PDFPagesSizeParams? params}) async {
+    final List? result = await methodChannel.invokeMethod<List?>(
+        'pdfPagesSize', params?.toJson());
+    result?.cast<List<double>>();
+    if (result == null) {
+      return null;
+    } else {
+      return List<PageSizeInfo>.generate(
+          result.length,
+          (int index) => PageSizeInfo(
+                pageNumber: (result[index][0] as double).toInt(),
+                leftEdgeXCoordinate: result[index][1] as double,
+                rightEdgeXCoordinate: result[index][2] as double,
+                topEdgeYCoordinate: result[index][3] as double,
+                bottomEdgeYCoordinate: result[index][4] as double,
+                widthOfPage: result[index][5] as double,
+                heightOfPage: result[index][6] as double,
+              ));
+    }
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -299,6 +321,19 @@ class PDFCompressorParams {
 
 enum WatermarkLayer { underContent, overContent }
 
+enum PositionType {
+  topLeft,
+  topCenter,
+  topRight,
+  centerLeft,
+  center,
+  centerRight,
+  bottomLeft,
+  bottomCenter,
+  bottomRight,
+  custom
+}
+
 /// Parameters for the [pdfWatermark] method.
 class PDFWatermarkParams {
   /// Provide path of pdf file which should be compressed.
@@ -322,6 +357,15 @@ class PDFWatermarkParams {
   /// Provide watermark text color.
   final Color watermarkColor;
 
+  /// Provide position of text.
+  final PositionType positionType;
+
+  /// Provide custom PositionType X coordinates list.
+  final List<double>? customPositionXCoordinatesList;
+
+  /// Provide custom PositionType Y coordinates list.
+  final List<double>? customPositionYCoordinatesList;
+
   /// Create parameters for the [pdfWatermark] method.
   const PDFWatermarkParams({
     required this.pdfPath,
@@ -331,7 +375,17 @@ class PDFWatermarkParams {
     this.opacity = 0.5,
     this.rotationAngle = 45,
     this.watermarkColor = Colors.black,
-  });
+    this.positionType = PositionType.center,
+    this.customPositionXCoordinatesList,
+    this.customPositionYCoordinatesList,
+  }) : assert(
+            positionType == PositionType.custom
+                ? (customPositionXCoordinatesList != null &&
+                        customPositionXCoordinatesList.length != 0) &&
+                    (customPositionYCoordinatesList != null &&
+                        customPositionYCoordinatesList.length != 0)
+                : true,
+            'if positionType == PositionType.custom then customPositionXCoordinatesList and customPositionYCoordinatesList can\'t be null or empty');
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -342,6 +396,63 @@ class PDFWatermarkParams {
       'opacity': opacity,
       'rotationAngle': rotationAngle,
       'watermarkColor': '#${watermarkColor.value.toRadixString(16)}',
+      'positionType': positionType.toString(),
+    };
+  }
+}
+
+class PageSizeInfo {
+  final int pageNumber;
+  final double leftEdgeXCoordinate;
+  final double rightEdgeXCoordinate;
+  final double topEdgeYCoordinate;
+  final double bottomEdgeYCoordinate;
+  final double widthOfPage;
+  final double heightOfPage;
+
+  PageSizeInfo({
+    required this.pageNumber,
+    required this.leftEdgeXCoordinate,
+    required this.rightEdgeXCoordinate,
+    required this.topEdgeYCoordinate,
+    required this.bottomEdgeYCoordinate,
+    required this.widthOfPage,
+    required this.heightOfPage,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pageNumber': pageNumber,
+      'leftEdgeXCoordinate': leftEdgeXCoordinate,
+      'rightEdgeXCoordinate': rightEdgeXCoordinate,
+      'topEdgeYCoordinate': topEdgeYCoordinate,
+      'bottomEdgeYCoordinate': bottomEdgeYCoordinate,
+      'widthOfPage': widthOfPage,
+      'heightOfPage': heightOfPage,
+    };
+  }
+
+  // Implement toString to make it easier to see information
+  // when using the print statement.
+  @override
+  String toString() {
+    return 'PageSizeInfo{pageNumber: $pageNumber, leftEdgeXCoordinate: $leftEdgeXCoordinate, rightEdgeXCoordinate: $rightEdgeXCoordinate, topEdgeYCoordinate: $topEdgeYCoordinate, bottomEdgeYCoordinate: $bottomEdgeYCoordinate, widthOfPage: $widthOfPage, heightOfPage: $heightOfPage}';
+  }
+}
+
+/// Parameters for the [pdfPagesSize] method.
+class PDFPagesSizeParams {
+  /// Provide path of pdf file which you want pages size info.
+  final String pdfPath;
+
+  /// Create parameters for the [pdfPagesSize] method.
+  const PDFPagesSizeParams({
+    required this.pdfPath,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
     };
   }
 }

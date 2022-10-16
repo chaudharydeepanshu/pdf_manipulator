@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -216,6 +217,25 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
     setState(() {
       _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfPagesSize(PDFPagesSizeParams params) async {
+    List? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfPagesSize(params: params);
+      if (kDebugMode) {
+        print(result);
+      }
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
       _isBusy = false;
     });
   }
@@ -705,6 +725,61 @@ class _MyAppState extends State<MyApp> {
                   ],
                 ),
               ),
+              const Text("PDF Pages Size Info"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFPagesSizeParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                        );
+                                        await _pdfPagesSize(params);
+                                      },
+                                child: const Text("Print all pages size info")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               const Text("PDF Watermark"),
               Card(
                 child: Row(
@@ -739,6 +814,9 @@ class _MyAppState extends State<MyApp> {
                                           watermarkLayer:
                                               WatermarkLayer.overContent,
                                           opacity: 0.7,
+                                          positionType: PositionType.center,
+                                          customPositionXCoordinatesList: null,
+                                          customPositionYCoordinatesList: null,
                                         );
                                         await _pdfWatermark(params);
                                       },

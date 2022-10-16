@@ -198,6 +198,20 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 opacity = call.argument("opacity"),
                 rotationAngle = call.argument("rotationAngle"),
                 watermarkColor = call.argument("watermarkColor"),
+                positionType = parseMethodCallWatermarkPositionTypeArgument(call)
+                    ?: PositionType.Center,
+                customPositionXCoordinatesList = parseMethodCallArrayOfDoubleArgument(
+                    call,
+                    "customPositionXCoordinatesList"
+                ),
+                customPositionYCoordinatesList = parseMethodCallArrayOfDoubleArgument(
+                    call,
+                    "customPositionYCoordinatesList"
+                ),
+            )
+            "pdfPagesSize" -> pdfManipulator!!.pdfPagesSize(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
             )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
@@ -240,6 +254,16 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         return null
     }
 
+    private fun parseMethodCallArrayOfDoubleArgument(
+        call: MethodCall,
+        arg: String
+    ): List<Double>? {
+        if (call.hasArgument(arg)) {
+            return call.argument<ArrayList<Double>>(arg)?.toList()
+        }
+        return null
+    }
+
     private fun parseMethodCallArrayOfMapArgument(
         call: MethodCall,
         arg: String
@@ -257,6 +281,35 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 WatermarkLayer.UnderContent
             } else {
                 WatermarkLayer.OverContent
+            }
+        }
+        return null
+    }
+
+    private fun parseMethodCallWatermarkPositionTypeArgument(call: MethodCall): PositionType? {
+        val arg = "positionType"
+
+        if (call.hasArgument(arg)) {
+            return if (call.argument<String>(arg)?.toString() == "PositionType.topLeft") {
+                PositionType.TopLeft
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.topCenter") {
+                PositionType.TopCenter
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.topRight") {
+                PositionType.TopRight
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.centerLeft") {
+                PositionType.CenterLeft
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.center") {
+                PositionType.Center
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.centerRight") {
+                PositionType.CenterRight
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.bottomLeft") {
+                PositionType.BottomLeft
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.bottomCenter") {
+                PositionType.BottomCenter
+            } else if (call.argument<String>(arg)?.toString() == "PositionType.bottomRight") {
+                PositionType.BottomRight
+            } else {
+                PositionType.Custom
             }
         }
         return null

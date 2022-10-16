@@ -25,6 +25,10 @@ enum class WatermarkLayer {
     UnderContent, OverContent
 }
 
+enum class PositionType {
+    TopLeft, TopCenter, TopRight, CenterLeft, Center, CenterRight, BottomLeft, BottomCenter, BottomRight, Custom
+}
+
 // For compressing pdf.
 suspend fun getWatermarkedPDFPath(
     sourceFilePath: String,
@@ -34,6 +38,9 @@ suspend fun getWatermarkedPDFPath(
     opacity: Double,
     rotationAngle: Double,
     watermarkColor: String,
+    positionType: PositionType,
+    customPositionXCoordinatesList: List<Double>,
+    customPositionYCoordinatesList: List<Double>,
     context: Activity,
 ): String? {
 
@@ -91,6 +98,19 @@ suspend fun getWatermarkedPDFPath(
 
             var layer: PdfCanvas
 
+            var position: PositionType = positionType
+
+            if (position == PositionType.Custom) {
+                if (customPositionXCoordinatesList.size == pdfDocument.numberOfPages && customPositionYCoordinatesList.size == pdfDocument.numberOfPages) {
+                } else {
+                    Log.e(
+                        "Warning",
+                        "customPositionXCoordinatesList or customPositionYCoordinatesList length is not equal to the total number of pages so assigning positionType to PositionType.center"
+                    )
+                    position = PositionType.Center
+                }
+            }
+
             // Implement transformation matrix usage in order to scale image
             for (i in 1..pdfDocument.numberOfPages) {
 
@@ -118,8 +138,52 @@ suspend fun getWatermarkedPDFPath(
                 gs1.fillOpacity = opacity.toFloat()
                 layer.setExtGState(gs1)
 
-                val x: Float = (pageSize.left + pageSize.right) / 2
-                val y: Float = (pageSize.top + pageSize.bottom) / 2
+                val x: Float
+                val y: Float
+
+                when (position) {
+                    PositionType.TopLeft -> {
+                        x = (0).toFloat()
+                        y = pageSize.height
+                    }
+                    PositionType.TopCenter -> {
+                        x = pageSize.width / 2
+                        y = pageSize.height
+                    }
+                    PositionType.TopRight -> {
+                        x = pageSize.width
+                        y = pageSize.height
+                    }
+                    PositionType.CenterLeft -> {
+                        x = (0).toFloat()
+                        y = pageSize.height / 2
+                    }
+                    PositionType.Center -> {
+                        x = pageSize.width / 2
+                        y = pageSize.height / 2
+                    }
+                    PositionType.CenterRight -> {
+                        x = pageSize.width
+                        y = pageSize.height / 2
+                    }
+                    PositionType.BottomLeft -> {
+                        x = (0).toFloat()
+                        y = (0).toFloat()
+                    }
+                    PositionType.BottomCenter -> {
+                        x = pageSize.width / 2
+                        y = (0).toFloat()
+                    }
+                    PositionType.BottomRight -> {
+                        x = pageSize.width
+                        y = (0).toFloat()
+                    }
+                    else -> {
+                        x = customPositionXCoordinatesList[i].toFloat()
+                        y = customPositionYCoordinatesList[i].toFloat()
+                    }
+                }
+
 
                 val canvasWatermark = Canvas(layer, pdfDocument.defaultPageSize)
                     .showTextAligned(

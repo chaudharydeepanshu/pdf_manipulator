@@ -1,3 +1,9 @@
+## 0.4.2
+
+* Added `positionType` in `pdfWatermark` method which provides various predefined and allows providing custom watermark positions.`
+* Added `pdfPagesSize` method for getting size info of pages of pdf.
+* Added `customPositionXCoordinatesList`, `customPositionYCoordinatesList` in `pdfWatermark` method for more fine controlling of watermark position.
+
 ## 0.4.1
 
 * Added `pdfWatermark` method for watermarking pdf.

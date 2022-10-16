@@ -57,6 +57,10 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('pdfWatermark() has not been implemented.');
   }
 
+  Future<List<PageSizeInfo>?> pdfPagesSize({PDFPagesSizeParams? params}) {
+    throw UnimplementedError('pdfPagesSize() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

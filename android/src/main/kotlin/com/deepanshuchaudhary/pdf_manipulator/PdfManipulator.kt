@@ -93,7 +93,7 @@ class PdfManipulator(
                 } else {
                     getSplitPDFPathsByPageCount(sourceFilePath!!, pageCount, activity)
                 }
-                finishSplitSuccessfullyWithListOfPaths(splitPDFPaths)
+                finishSplitSuccessfullyWithListOfString(splitPDFPaths)
             } catch (e: Exception) {
                 finishWithError(
                     "splitPdf_exception",
@@ -358,6 +358,9 @@ class PdfManipulator(
         opacity: Double?,
         rotationAngle: Double?,
         watermarkColor: String?,
+        positionType: PositionType?,
+        customPositionXCoordinatesList: List<Double>?,
+        customPositionYCoordinatesList: List<Double>?,
     ) {
         Log.d(
             LOG_TAG,
@@ -381,10 +384,58 @@ class PdfManipulator(
                         opacity!!,
                         rotationAngle!!,
                         watermarkColor!!,
+                        positionType!!,
+                        customPositionXCoordinatesList ?: listOf(),
+                        customPositionYCoordinatesList ?: listOf(),
                         activity
                     )
 
                 finishSuccessfullyWithSinglePath(resultPDFPath)
+            } catch (e: Exception) {
+                finishWithError(
+                    "pdfCompressor_exception",
+                    e.stackTraceToString(),
+                    null
+                )
+            } catch (e: OutOfMemoryError) {
+                finishWithError(
+                    "pdfCompressor_OutOfMemoryError",
+                    e.stackTraceToString(),
+                    null
+                )
+            }
+        }
+        Log.d(LOG_TAG, "pdfCompressor - OUT")
+    }
+
+    // For pdf pages size.
+    fun pdfPagesSize(
+        result: MethodChannel.Result,
+        sourceFilePath: String?,
+    ) {
+        Log.d(
+            LOG_TAG,
+            "pdfCompressor - IN, sourceFilePath=$sourceFilePath"
+        )
+
+        if (!setPendingResult(result)) {
+            finishWithAlreadyActiveError(result)
+            return
+        }
+
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        job = uiScope.launch {
+            try {
+                val result: List<List<Double>> =
+                    getPDFPagesSize(
+                        sourceFilePath!!,
+                        activity
+                    )
+                if (result.isEmpty()) {
+                    finishSplitSuccessfullyWithListOfListOfDouble(null)
+                } else {
+                    finishSplitSuccessfullyWithListOfListOfDouble(result)
+                }
             } catch (e: Exception) {
                 finishWithError(
                     "pdfCompressor_exception",
@@ -433,7 +484,12 @@ class PdfManipulator(
         clearPendingResult()
     }
 
-    private fun finishSplitSuccessfullyWithListOfPaths(result: List<String>?) {
+    private fun finishSplitSuccessfullyWithListOfString(result: List<String>?) {
+        pendingResult?.success(result)
+        clearPendingResult()
+    }
+
+    private fun finishSplitSuccessfullyWithListOfListOfDouble(result: List<List<Double>>?) {
         pendingResult?.success(result)
         clearPendingResult()
     }
