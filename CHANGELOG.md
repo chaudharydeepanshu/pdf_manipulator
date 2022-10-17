@@ -1,3 +1,7 @@
+## 0.4.3
+
+* Fixed `pdfPagesSize` method OOM issue also removed redundant properties. Also, you can use [pdf_bitmaps](https://pub.dev/packages/pdf_bitmaps) for getting size info specific page of pdf quickly.
+
 ## 0.4.2
 
 * Added `positionType` in `pdfWatermark` method which provides various predefined and allows providing custom watermark positions.`
@@ -18,7 +22,7 @@
  
 ## 0.2.2
 
-* Fixes OOfM error in some cases.
+* Fixes OOM error in some cases.
 
 ## 0.2.1
 

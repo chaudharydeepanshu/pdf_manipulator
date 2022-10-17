@@ -78,12 +78,8 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
           result.length,
           (int index) => PageSizeInfo(
                 pageNumber: (result[index][0] as double).toInt(),
-                leftEdgeXCoordinate: result[index][1] as double,
-                rightEdgeXCoordinate: result[index][2] as double,
-                topEdgeYCoordinate: result[index][3] as double,
-                bottomEdgeYCoordinate: result[index][4] as double,
-                widthOfPage: result[index][5] as double,
-                heightOfPage: result[index][6] as double,
+                widthOfPage: result[index][1] as double,
+                heightOfPage: result[index][2] as double,
               ));
     }
   }
@@ -402,20 +398,17 @@ class PDFWatermarkParams {
 }
 
 class PageSizeInfo {
+  /// Pdf page number.
   final int pageNumber;
-  final double leftEdgeXCoordinate;
-  final double rightEdgeXCoordinate;
-  final double topEdgeYCoordinate;
-  final double bottomEdgeYCoordinate;
+
+  /// Pdf page width.
   final double widthOfPage;
+
+  /// Pdf page height.
   final double heightOfPage;
 
   PageSizeInfo({
     required this.pageNumber,
-    required this.leftEdgeXCoordinate,
-    required this.rightEdgeXCoordinate,
-    required this.topEdgeYCoordinate,
-    required this.bottomEdgeYCoordinate,
     required this.widthOfPage,
     required this.heightOfPage,
   });
@@ -423,10 +416,6 @@ class PageSizeInfo {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'pageNumber': pageNumber,
-      'leftEdgeXCoordinate': leftEdgeXCoordinate,
-      'rightEdgeXCoordinate': rightEdgeXCoordinate,
-      'topEdgeYCoordinate': topEdgeYCoordinate,
-      'bottomEdgeYCoordinate': bottomEdgeYCoordinate,
       'widthOfPage': widthOfPage,
       'heightOfPage': heightOfPage,
     };
@@ -436,7 +425,7 @@ class PageSizeInfo {
   // when using the print statement.
   @override
   String toString() {
-    return 'PageSizeInfo{pageNumber: $pageNumber, leftEdgeXCoordinate: $leftEdgeXCoordinate, rightEdgeXCoordinate: $rightEdgeXCoordinate, topEdgeYCoordinate: $topEdgeYCoordinate, bottomEdgeYCoordinate: $bottomEdgeYCoordinate, widthOfPage: $widthOfPage, heightOfPage: $heightOfPage}';
+    return 'PageSizeInfo{pageNumber: $pageNumber, widthOfPage: $widthOfPage, heightOfPage: $heightOfPage}';
   }
 }
 

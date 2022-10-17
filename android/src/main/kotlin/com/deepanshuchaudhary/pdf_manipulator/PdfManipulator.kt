@@ -38,7 +38,7 @@ class PdfManipulator(
             try {
                 val mergedPDFPath: String? = getMergedPDFPath(sourceFilesPaths!!, activity)
 
-                finishSuccessfullyWithSinglePath(mergedPDFPath)
+                finishSuccessfullyWithString(mergedPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "mergePdfs_exception",
@@ -133,7 +133,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageDeleter(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "removePdfPages_exception",
@@ -173,7 +173,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageReorder(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageReorder_exception",
@@ -223,7 +223,7 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageRotator(sourceFilePath!!, newPagesRotationInfo, activity)
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageRotator_exception",
@@ -281,7 +281,7 @@ class PdfManipulator(
                         activity
                     )
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfPageRotatorDeleterReorder_exception",
@@ -330,7 +330,7 @@ class PdfManipulator(
                         activity
                     )
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfCompressor_exception",
@@ -390,7 +390,7 @@ class PdfManipulator(
                         activity
                     )
 
-                finishSuccessfullyWithSinglePath(resultPDFPath)
+                finishSuccessfullyWithString(resultPDFPath)
             } catch (e: Exception) {
                 finishWithError(
                     "pdfCompressor_exception",
@@ -479,7 +479,7 @@ class PdfManipulator(
         pendingResult = null
     }
 
-    private fun finishSuccessfullyWithSinglePath(result: String?) {
+    private fun finishSuccessfullyWithString(result: String?) {
         pendingResult?.success(result)
         clearPendingResult()
     }
