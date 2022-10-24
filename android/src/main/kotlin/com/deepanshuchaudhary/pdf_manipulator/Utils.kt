@@ -13,16 +13,13 @@ class Utils {
     }
 
     fun copyDataFromSourceToDestDocument(
-        sourceFileUri: Uri,
-        destinationFileUri: Uri,
-        contentResolver: ContentResolver
+        sourceFileUri: Uri, destinationFileUri: Uri, contentResolver: ContentResolver
     ) {
 
         // its important to truncate an output file to size zero before writing to it
         // as user may have selected an old file to overwrite which need to be cleaned before writing
         truncateDocumentToZeroSize(
-            uri = destinationFileUri,
-            contentResolver = contentResolver
+            uri = destinationFileUri, contentResolver = contentResolver
         )
 
         try {

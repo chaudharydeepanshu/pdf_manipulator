@@ -1,3 +1,9 @@
+## 0.4.4
+
+* Added `pdfEncryption` method for pdf encryption.
+* Added `pdfDecryption` method for pdf decryption.
+* Added `pdfValidityAndProtection` method for getting pdf validity and protection info. Also, you can use [pdf_bitmaps](https://pub.dev/packages/pdf_bitmaps) for getting pdf validity and protection info quickly.
+
 ## 0.4.3
 
 * Fixed `pdfPagesSize` method OOM issue also removed redundant properties. Also, you can use [pdf_bitmaps](https://pub.dev/packages/pdf_bitmaps) for getting size info specific page of pdf quickly.

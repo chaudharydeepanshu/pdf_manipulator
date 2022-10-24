@@ -85,6 +85,38 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<PdfValidityAndProtection?> pdfValidityAndProtection(
+      {PDFValidityAndProtectionParams? params}) async {
+    final List? result = await methodChannel.invokeMethod<List?>(
+        'pdfValidityAndProtection', params?.toJson());
+    result?.cast<List<bool?>>();
+    if (result == null) {
+      return null;
+    } else {
+      return PdfValidityAndProtection(
+          isPDFValid: result[0],
+          isOwnerPasswordProtected: result[1],
+          isOpenPasswordProtected: result[2],
+          isPrintingAllowed: result[3],
+          isModifyContentsAllowed: result[4]);
+    }
+  }
+
+  @override
+  Future<String?> pdfDecryption({PDFDecryptionParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfDecryption', params?.toJson());
+    return path;
+  }
+
+  @override
+  Future<String?> pdfEncryption({PDFEncryptionParams? params}) async {
+    final String? path = await methodChannel.invokeMethod<String?>(
+        'pdfEncryption', params?.toJson());
+    return path;
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -141,12 +173,33 @@ class PDFSplitterParams {
       this.pageRanges,
       this.pageRange})
       : assert(
-            pageCount == null ||
-                byteSize == null ||
-                pageNumbers == null ||
-                pageRanges == null ||
-                pageRange == null,
-            'provide only any one out of pageCount or byteSize or pageNumbers or pageRanges or pageRange');
+            pageCount != null
+                ? (byteSize == null &&
+                    pageNumbers == null &&
+                    pageRanges == null &&
+                    pageRange == null)
+                : byteSize != null
+                    ? (pageCount == null &&
+                        pageNumbers == null &&
+                        pageRanges == null &&
+                        pageRange == null)
+                    : pageNumbers != null
+                        ? (pageCount == null &&
+                            byteSize == null &&
+                            pageRanges == null &&
+                            pageRange == null)
+                        : pageRanges != null
+                            ? (pageCount == null &&
+                                byteSize == null &&
+                                pageNumbers == null &&
+                                pageRange == null)
+                            : pageRange != null
+                                ? (pageCount == null &&
+                                    byteSize == null &&
+                                    pageNumbers == null &&
+                                    pageRanges == null)
+                                : false,
+            'Provide only anyone out of pageCount, byteSize, pageNumbers, pageRanges, pageRange');
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -442,6 +495,234 @@ class PDFPagesSizeParams {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'pdfPath': pdfPath,
+    };
+  }
+}
+
+class PdfValidityAndProtection {
+  /// Is true if pdf is valid.
+  final bool? isPDFValid;
+
+  /// Is true if pdf is owner/permission password protected.
+  final bool? isOwnerPasswordProtected;
+
+  /// Is true if pdf is user/open password protected.
+  final bool? isOpenPasswordProtected;
+
+  /// Is true if pdf printing is allowed.
+  final bool? isPrintingAllowed;
+
+  /// Is true if pdf changes are allowed.
+  final bool? isModifyContentsAllowed;
+
+  PdfValidityAndProtection({
+    required this.isPDFValid,
+    required this.isOwnerPasswordProtected,
+    required this.isOpenPasswordProtected,
+    required this.isPrintingAllowed,
+    required this.isModifyContentsAllowed,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'isPDFValid': isPDFValid,
+      'isOwnerPasswordProtected': isOwnerPasswordProtected,
+      'isOpenPasswordProtected': isOpenPasswordProtected,
+      'isPrintingAllowed': isPrintingAllowed,
+      'isModifyContentsAllowed': isModifyContentsAllowed,
+    };
+  }
+
+  // Implement toString to make it easier to see information
+  // when using the print statement.
+  @override
+  String toString() {
+    return 'PdfValidityAndProtection{isPDFValid: $isPDFValid, isOwnerPasswordProtected: $isOwnerPasswordProtected, isOpenPasswordProtected: $isOpenPasswordProtected, isPrintingAllowed: $isPrintingAllowed, isModifyContentsAllowed: $isModifyContentsAllowed}';
+  }
+}
+
+/// Parameters for the [pdfValidityAndProtection] method.
+class PDFValidityAndProtectionParams {
+  /// Provide path of pdf file which you want validity and protection info.
+  final String pdfPath;
+
+  /// Provide owner password.
+  final String? ownerPassword;
+
+  /// Create parameters for the [pdfValidityAndProtection] method.
+  const PDFValidityAndProtectionParams({
+    required this.pdfPath,
+    this.ownerPassword = "",
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
+      'ownerPassword': ownerPassword,
+    };
+  }
+}
+
+/// Parameters for the [pdfDecryption] method.
+class PDFDecryptionParams {
+  /// Provide path of pdf file which you want decrypted.
+  final String pdfPath;
+
+  /// Provide owner or user password.
+  final String? password;
+
+  /// Create parameters for the [pdfDecryption] method.
+  const PDFDecryptionParams({
+    required this.pdfPath,
+    this.password = "",
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
+      'password': password,
+    };
+  }
+}
+
+/// Parameters for the [pdfEncryption] method.
+class PDFEncryptionParams {
+  /// Provide path of pdf file which you want encrypted.
+  final String pdfPath;
+
+  /// Provide owner password.
+  final String ownerPassword;
+
+  /// Provide user password.
+  final String userPassword;
+
+  /// Allows printing permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowPrinting;
+
+  /// Allows modify permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowModifyContents;
+
+  /// Allows copy permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowCopy;
+
+  /// Allows modifying annotations permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowModifyAnnotations;
+
+  /// Allows fill in permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowFillIn;
+
+  /// Allows screen readers permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowScreenReaders;
+
+  /// Allows assembly permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowAssembly;
+
+  /// Allows degraded printing permission.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool allowDegradedPrinting;
+
+  /// Enables StandardEncryptionAES40 encryption. standardEncryptionAES40 implicitly sets doNotEncryptMetadata and encryptEmbeddedFilesOnly as false.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool standardEncryptionAES40;
+
+  /// Enables StandardEncryptionAES128 encryption. standardEncryptionAES128 implicitly sets EncryptionConstants.EMBEDDED_FILES_ONLY as false.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool standardEncryptionAES128;
+
+  /// Enables encryptionAES128 encryption.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool encryptionAES128;
+
+  /// Enables encryptionAES256 encryption.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool encryptionAES256;
+
+  /// Enables embedded files only encryption.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool encryptEmbeddedFilesOnly;
+
+  /// Enables do not encrypt metadata encryption.
+  ///
+  /// Please be aware that the passed encryption types may override permissions.
+  final bool doNotEncryptMetadata;
+
+  /// Create parameters for the [pdfEncryption] method.
+  const PDFEncryptionParams({
+    required this.pdfPath,
+    this.ownerPassword = "",
+    this.userPassword = "",
+    this.allowPrinting = false,
+    this.allowModifyContents = false,
+    this.allowCopy = false,
+    this.allowModifyAnnotations = false,
+    this.allowFillIn = false,
+    this.allowScreenReaders = false,
+    this.allowAssembly = false,
+    this.allowDegradedPrinting = false,
+    this.standardEncryptionAES40 = false,
+    this.standardEncryptionAES128 = false,
+    this.encryptionAES128 = false,
+    this.encryptionAES256 = false,
+    this.encryptEmbeddedFilesOnly = false,
+    this.doNotEncryptMetadata = false,
+  }) : assert(
+            standardEncryptionAES40 == true
+                ? (standardEncryptionAES128 == false &&
+                    encryptionAES128 == false &&
+                    encryptionAES256 == false)
+                : standardEncryptionAES128 == true
+                    ? (standardEncryptionAES40 == false &&
+                        encryptionAES128 == false &&
+                        encryptionAES256 == false)
+                    : encryptionAES128 == true
+                        ? (standardEncryptionAES40 == false &&
+                            standardEncryptionAES128 == false &&
+                            encryptionAES256 == false)
+                        : encryptionAES256 == true
+                            ? (standardEncryptionAES40 == false &&
+                                standardEncryptionAES128 == false &&
+                                encryptionAES128 == false)
+                            : false,
+            'Set only anyone encryption out of standardEncryptionAES40, standardEncryptionAES128, encryptionAES128, encryptionAES256 true');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'pdfPath': pdfPath,
+      'ownerPassword': ownerPassword,
+      'userPassword': userPassword,
+      'allowPrinting': allowPrinting,
+      'allowModifyContents': allowModifyContents,
+      'allowCopy': allowCopy,
+      'allowModifyAnnotations': allowModifyAnnotations,
+      'allowFillIn': allowFillIn,
+      'allowScreenReaders': allowScreenReaders,
+      'allowAssembly': allowAssembly,
+      'allowDegradedPrinting': allowDegradedPrinting,
+      'standardEncryptionAES40': standardEncryptionAES40,
+      'standardEncryptionAES128': standardEncryptionAES128,
+      'encryptionAES128': encryptionAES128,
+      'encryptEmbeddedFilesOnly': encryptEmbeddedFilesOnly,
+      'doNotEncryptMetadata': doNotEncryptMetadata,
     };
   }
 }

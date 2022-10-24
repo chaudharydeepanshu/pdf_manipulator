@@ -31,19 +31,17 @@ suspend fun getPDFPageRotator(
 
         val uri = Utils().getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
             contentResolver = contentResolver
         )
 
-        val pdfReader = PdfReader(pdfReaderFile)
+        val pdfReader = PdfReader(pdfReaderFile).setUnethicalReading(true)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val pdfWriter = PdfWriter(pdfWriterFile)
 
@@ -52,7 +50,7 @@ suspend fun getPDFPageRotator(
 
         val pdfDoc = PdfDocument(pdfReader, pdfWriter)
 
-        pagesRotationInfo.forEach {pageRotationInfo ->
+        pagesRotationInfo.forEach { pageRotationInfo ->
             val page = pdfDoc.getPage(pageRotationInfo.pageNumber)
             val rotate = page.rotation
             if (rotate == 0) {
@@ -63,6 +61,8 @@ suspend fun getPDFPageRotator(
         }
 
         pdfDoc.close()
+        pdfReader.close()
+        pdfWriter.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 

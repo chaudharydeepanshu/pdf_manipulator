@@ -29,19 +29,17 @@ suspend fun getPDFPageReorder(
 
         val uri = Utils().getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
             contentResolver = contentResolver
         )
 
-        val pdfReader = PdfReader(pdfReaderFile)
+        val pdfReader = PdfReader(pdfReaderFile).setUnethicalReading(true)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val pdfWriter = PdfWriter(pdfWriterFile)
 
@@ -58,6 +56,8 @@ suspend fun getPDFPageReorder(
         srcDoc.copyPagesTo(pageNumbers, resultDoc)
         resultDoc.close()
         srcDoc.close()
+        pdfReader.close()
+        pdfWriter.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 

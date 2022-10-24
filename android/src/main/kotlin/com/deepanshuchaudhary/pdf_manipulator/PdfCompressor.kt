@@ -36,27 +36,24 @@ suspend fun getCompressedPDFPath(
 
         val uri = Utils().getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
             contentResolver = contentResolver
         )
 
-        val pdfReader = PdfReader(pdfReaderFile)
+        val pdfReader = PdfReader(pdfReaderFile).setUnethicalReading(true)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val pdfWriter = PdfWriter(pdfWriterFile)
 
         pdfWriter.setSmartMode(true)
         pdfWriter.compressionLevel = 9
 
-        val pdfDocument =
-            PdfDocument(pdfReader, pdfWriter)
+        val pdfDocument = PdfDocument(pdfReader, pdfWriter)
 
         suspend fun reduceImagesSize(scale: Double, quality: Int) {
             val factor = scale.toFloat()
@@ -93,26 +90,16 @@ suspend fun getCompressedPDFPath(
                 options.outHeight = height
 
                 val bmp = BitmapFactory.decodeByteArray(
-                    image.imageBytes,
-                    0,
-                    image.imageBytes.size,
-                    options
+                    image.imageBytes, 0, image.imageBytes.size, options
                 )
 
                 val matrix = Matrix()
                 matrix.postTranslate((-0).toFloat(), (-0).toFloat())
 
-                if (factor != 1.0f)
-                    matrix.postScale(factor, factor)
+                if (factor != 1.0f) matrix.postScale(factor, factor)
 
                 val scaledBitmap = Bitmap.createBitmap(
-                    bmp,
-                    0,
-                    0,
-                    image.width.toInt(),
-                    image.height.toInt(),
-                    matrix,
-                    true
+                    bmp, 0, 0, image.width.toInt(), image.height.toInt(), matrix, true
                 )
                 bmp.recycle()
                 val scaledBitmapStream = ByteArrayOutputStream()
@@ -152,6 +139,9 @@ suspend fun getCompressedPDFPath(
 
         pdfDocument.close()
 
+        pdfReader.close()
+        pdfWriter.close()
+
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 
         val end = System.nanoTime()
@@ -164,10 +154,7 @@ suspend fun getCompressedPDFPath(
 }
 
 fun resetImageStream(
-    stream: PdfStream,
-    imgBytes: ByteArray,
-    imgWidth: Int,
-    imgHeight: Int
+    stream: PdfStream, imgBytes: ByteArray, imgWidth: Int, imgHeight: Int
 ) {
 //    stream.clear()
     if (stream.bytes.size > imgBytes.size) {

@@ -51,11 +51,12 @@ suspend fun getMergedPDFPath(
                     destinationFileUri = tempFile.toUri(),
                     contentResolver = contentResolver
                 )
-                val pdfReader = PdfReader(tempFile)
+                val pdfReader = PdfReader(tempFile).setUnethicalReading(true)
                 pdfReader.setMemorySavingMode(true)
                 val pdfDoc = PdfDocument(pdfReader)
                 listOfTaggingStatus.add(pdfDoc.isTagged)
                 pdfDoc.close()
+                pdfReader.close()
                 tempFile.delete()
 
             }
@@ -83,6 +84,8 @@ suspend fun getMergedPDFPath(
 
             //Close document
             doc.close()
+            writer.close()
+            pdf.close()
             return tempTaggedPDFFile
         }
 
@@ -110,7 +113,7 @@ suspend fun getMergedPDFPath(
 
         sourceTempFilesList.add(parentTempFile)
 
-        val pdfReader = PdfReader(parentTempFile)
+        val pdfReader = PdfReader(parentTempFile).setUnethicalReading(true)
 
         pdfReader.setMemorySavingMode(true)
 
@@ -139,7 +142,7 @@ suspend fun getMergedPDFPath(
 
                 sourceTempFilesList.add(tempFile)
 
-                val pdfRead = PdfReader(tempFile)
+                val pdfRead = PdfReader(tempFile).setUnethicalReading(true)
 
                 pdfRead.setMemorySavingMode(true)
 
@@ -151,7 +154,7 @@ suspend fun getMergedPDFPath(
                 pdfDocument.flushCopiedObjects(pdfDocument2)
 
                 pdfDocument2.close()
-
+                pdfRead.close()
 
                 utils.deleteTempFiles(listOfTempFiles = listOf(tempFile))
 

@@ -61,6 +61,20 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('pdfPagesSize() has not been implemented.');
   }
 
+  Future<PdfValidityAndProtection?> pdfValidityAndProtection(
+      {PDFValidityAndProtectionParams? params}) {
+    throw UnimplementedError(
+        'pdfValidityAndProtection() has not been implemented.');
+  }
+
+  Future<String?> pdfDecryption({PDFDecryptionParams? params}) {
+    throw UnimplementedError('pdfDecryption() has not been implemented.');
+  }
+
+  Future<String?> pdfEncryption({PDFEncryptionParams? params}) {
+    throw UnimplementedError('pdfEncryption() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

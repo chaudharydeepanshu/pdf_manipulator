@@ -56,34 +56,29 @@ suspend fun getWatermarkedPDFPath(
 
         val uri = Utils().getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
             contentResolver = contentResolver
         )
 
-        val pdfReader = PdfReader(pdfReaderFile)
+        val pdfReader = PdfReader(pdfReaderFile).setUnethicalReading(true)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val pdfWriter = PdfWriter(pdfWriterFile)
 
         pdfWriter.setSmartMode(true)
         pdfWriter.compressionLevel = 9
 
-        val pdfDocument =
-            PdfDocument(pdfReader, pdfWriter)
+        val pdfDocument = PdfDocument(pdfReader, pdfWriter)
 
         fun watermark() {
 
             val font = PdfFontFactory.createFont(StandardFonts.HELVETICA)
-            val paragraph = Paragraph(text)
-                .setFont(font)
-                .setFontSize(fontSize.toFloat())
+            val paragraph = Paragraph(text).setFont(font).setFontSize(fontSize.toFloat())
 
             val color = try {
                 Color.parseColor(watermarkColor)
@@ -123,9 +118,7 @@ suspend fun getWatermarkedPDFPath(
 
                 layer = if (watermarkLayer == WatermarkLayer.UnderContent) {
                     PdfCanvas(
-                        pdfPage.newContentStreamBefore(),
-                        PdfResources(),
-                        pdfDocument
+                        pdfPage.newContentStreamBefore(), PdfResources(), pdfDocument
                     )
                 } else {
                     PdfCanvas(pdfPage)
@@ -185,16 +178,15 @@ suspend fun getWatermarkedPDFPath(
                 }
 
 
-                val canvasWatermark = Canvas(layer, pdfDocument.defaultPageSize)
-                    .showTextAligned(
-                        paragraph,
-                        x,
-                        y,
-                        i,
-                        TextAlignment.CENTER,
-                        VerticalAlignment.TOP,
-                        rotationAngle.toFloat()
-                    )
+                val canvasWatermark = Canvas(layer, pdfDocument.defaultPageSize).showTextAligned(
+                    paragraph,
+                    x,
+                    y,
+                    i,
+                    TextAlignment.CENTER,
+                    VerticalAlignment.TOP,
+                    rotationAngle.toFloat()
+                )
                 canvasWatermark.close()
 
                 layer.restoreState()
@@ -205,6 +197,8 @@ suspend fun getWatermarkedPDFPath(
         watermark()
 
         pdfDocument.close()
+        pdfReader.close()
+        pdfWriter.close()
 
         utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
 

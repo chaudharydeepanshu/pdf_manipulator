@@ -122,8 +122,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             "mergePDFs" -> pdfManipulator!!.mergePdfs(
                 result,
                 sourceFilesPaths = parseMethodCallArrayOfStringArgument(
-                    call,
-                    "pdfsPaths"
+                    call, "pdfsPaths"
                 ),
             )
             "splitPDF" -> pdfManipulator!!.splitPdf(
@@ -132,12 +131,10 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 pageCount = call.argument("pageCount") ?: 1,
                 byteSize = call.argument("byteSize"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
-                    call,
-                    "pageNumbers"
+                    call, "pageNumbers"
                 ),
                 pageRanges = parseMethodCallArrayOfStringArgument(
-                    call,
-                    "pageRanges"
+                    call, "pageRanges"
                 ),
                 pageRange = call.argument("pageRange"),
             )
@@ -145,40 +142,34 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 result,
                 sourceFilePath = call.argument("pdfPath"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
-                    call,
-                    "pageNumbers"
+                    call, "pageNumbers"
                 ),
             )
             "pdfPageReorder" -> pdfManipulator!!.pdfPageReorder(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
                 pageNumbers = parseMethodCallArrayOfIntArgument(
-                    call,
-                    "pageNumbers"
+                    call, "pageNumbers"
                 ),
             )
             "pdfPageRotator" -> pdfManipulator!!.pdfPageRotator(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
                 pagesRotationInfo = parseMethodCallArrayOfMapArgument(
-                    call,
-                    "pagesRotationInfo"
+                    call, "pagesRotationInfo"
                 ),
             )
             "pdfPageRotatorDeleterReorder" -> pdfManipulator!!.pdfPageRotatorDeleterReorder(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
                 pageNumbersForReorder = parseMethodCallArrayOfIntArgument(
-                    call,
-                    "pageNumbersForReorder"
+                    call, "pageNumbersForReorder"
                 ) ?: listOf(),
                 pageNumbersForDeleter = parseMethodCallArrayOfIntArgument(
-                    call,
-                    "pageNumbersForDeleter"
+                    call, "pageNumbersForDeleter"
                 ) ?: listOf(),
                 pagesRotationInfo = parseMethodCallArrayOfMapArgument(
-                    call,
-                    "pagesRotationInfo"
+                    call, "pagesRotationInfo"
                 ) ?: listOf(),
             )
             "pdfCompressor" -> pdfManipulator!!.pdfCompressor(
@@ -201,17 +192,44 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 positionType = parseMethodCallWatermarkPositionTypeArgument(call)
                     ?: PositionType.Center,
                 customPositionXCoordinatesList = parseMethodCallArrayOfDoubleArgument(
-                    call,
-                    "customPositionXCoordinatesList"
+                    call, "customPositionXCoordinatesList"
                 ),
                 customPositionYCoordinatesList = parseMethodCallArrayOfDoubleArgument(
-                    call,
-                    "customPositionYCoordinatesList"
+                    call, "customPositionYCoordinatesList"
                 ),
             )
             "pdfPagesSize" -> pdfManipulator!!.pdfPagesSize(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
+            )
+            "pdfValidityAndProtection" -> pdfManipulator!!.pdfValidityAndProtection(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
+                ownerPassword = call.argument("password") ?: "",
+            )
+            "pdfDecryption" -> pdfManipulator!!.pdfDecryption(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
+                ownerPassword = call.argument("password") ?: "",
+            )
+            "pdfEncryption" -> pdfManipulator!!.pdfEncryption(
+                result,
+                sourceFilePath = call.argument("pdfPath"),
+                ownerPassword = call.argument("ownerPassword") ?: "",
+                userPassword = call.argument("userPassword") ?: "",
+                allowPrinting = call.argument("allowPrinting") ?: false,
+                allowModifyContents = call.argument("allowModifyContents") ?: false,
+                allowCopy = call.argument("allowCopy") ?: false,
+                allowModifyAnnotations = call.argument("allowModifyAnnotations") ?: false,
+                allowFillIn = call.argument("allowFillIn") ?: false,
+                allowScreenReaders = call.argument("allowScreenReaders") ?: false,
+                allowAssembly = call.argument("allowAssembly") ?: false,
+                allowDegradedPrinting = call.argument("allowDegradedPrinting") ?: false,
+                standardEncryptionAES40 = call.argument("standardEncryptionAES40") ?: false,
+                standardEncryptionAES128 = call.argument("standardEncryptionAES128") ?: false,
+                encryptionAES128 = call.argument("encryptionAES128") ?: false,
+                encryptEmbeddedFilesOnly = call.argument("encryptEmbeddedFilesOnly") ?: false,
+                doNotEncryptMetadata = call.argument("doNotEncryptMetadata") ?: false,
             )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
@@ -235,8 +253,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun parseMethodCallArrayOfStringArgument(
-        call: MethodCall,
-        arg: String
+        call: MethodCall, arg: String
     ): List<String>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<String>>(arg)?.toList()
@@ -245,8 +262,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun parseMethodCallArrayOfIntArgument(
-        call: MethodCall,
-        arg: String
+        call: MethodCall, arg: String
     ): List<Int>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<Int>>(arg)?.toList()
@@ -255,8 +271,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun parseMethodCallArrayOfDoubleArgument(
-        call: MethodCall,
-        arg: String
+        call: MethodCall, arg: String
     ): List<Double>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<Double>>(arg)?.toList()
@@ -265,8 +280,7 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun parseMethodCallArrayOfMapArgument(
-        call: MethodCall,
-        arg: String
+        call: MethodCall, arg: String
     ): List<Map<String, Int>>? {
         if (call.hasArgument(arg)) {
             return call.argument<ArrayList<Map<String, Int>>>(arg)?.toList()

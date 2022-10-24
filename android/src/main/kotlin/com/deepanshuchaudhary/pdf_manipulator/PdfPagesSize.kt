@@ -37,8 +37,7 @@ suspend fun getPDFPagesSize(
 
 //        val sourceFileInputStream: InputStream? = contentResolver.openInputStream(uri)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
@@ -48,8 +47,7 @@ suspend fun getPDFPagesSize(
         val pdfReader = PdfReader(pdfReaderFile)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfDocument =
-            PdfDocument(pdfReader)
+        val pdfDocument = PdfDocument(pdfReader)
 
         // Getting pdf all pages size info.
         for (i in 1..pdfDocument.numberOfPages) {
@@ -59,9 +57,7 @@ suspend fun getPDFPagesSize(
 
             result.add(
                 listOf(
-                    i.toDouble(),
-                    pageSize.width.toDouble(),
-                    pageSize.height.toDouble()
+                    i.toDouble(), pageSize.width.toDouble(), pageSize.height.toDouble()
                 )
             )
 

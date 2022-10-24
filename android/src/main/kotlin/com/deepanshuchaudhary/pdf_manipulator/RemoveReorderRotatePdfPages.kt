@@ -31,19 +31,17 @@ suspend fun getPDFPageRotatorDeleterReorder(
 
         val uri = Utils().getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
             contentResolver = contentResolver
         )
 
-        val pdfReader = PdfReader(pdfReaderFile)
+        val pdfReader = PdfReader(pdfReaderFile).setUnethicalReading(true)
         pdfReader.setMemorySavingMode(true)
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val pdfWriter = PdfWriter(pdfWriterFile)
 
@@ -77,11 +75,10 @@ suspend fun getPDFPageRotatorDeleterReorder(
         if (newPageNumbersForReorder.isNotEmpty()) {
 
             //---------------------Using the previous written file as source---------------------
-            val updatedPdfReader = PdfReader(pdfWriterFile)
+            val updatedPdfReader = PdfReader(pdfWriterFile).setUnethicalReading(true)
             pdfReader.setMemorySavingMode(true)
 
-            val newPdfWriterFile: File =
-                File.createTempFile("writerTempFile", ".pdf")
+            val newPdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
             val newPfWriter = PdfWriter(newPdfWriterFile)
 
@@ -101,6 +98,8 @@ suspend fun getPDFPageRotatorDeleterReorder(
             srcDoc.copyPagesTo(newPageNumbersForReorder, resultDoc)
             resultDoc.close()
             srcDoc.close()
+            updatedPdfReader.close()
+            newPfWriter.close()
             //---------------------For reordering pages---------------------
 
             utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile, pdfWriterFile))
@@ -112,11 +111,10 @@ suspend fun getPDFPageRotatorDeleterReorder(
         } else if (pageNumbersForDeleter.isNotEmpty()) {
 
             //---------------------Using the previous written file as source---------------------
-            val updatedPdfReader = PdfReader(pdfWriterFile)
+            val updatedPdfReader = PdfReader(pdfWriterFile).setUnethicalReading(true)
             pdfReader.setMemorySavingMode(true)
 
-            val newPdfWriterFile: File =
-                File.createTempFile("writerTempFile", ".pdf")
+            val newPdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
             val newPfWriter = PdfWriter(newPdfWriterFile)
 
@@ -126,8 +124,7 @@ suspend fun getPDFPageRotatorDeleterReorder(
 
             //---------------------For deleting pages---------------------
 
-            val pdfDocument =
-                PdfDocument(updatedPdfReader, newPfWriter)
+            val pdfDocument = PdfDocument(updatedPdfReader, newPfWriter)
 
             //Important to use descending as we remove a page the number of pages in your PDF will change
             val descendingListOfPageNumbers = pageNumbersForDeleter.sortedDescending()
@@ -137,6 +134,8 @@ suspend fun getPDFPageRotatorDeleterReorder(
             }
 
             pdfDocument.close()
+            updatedPdfReader.close()
+            newPfWriter.close()
             //---------------------For deleting pages---------------------
 
             utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile, pdfWriterFile))
@@ -155,6 +154,9 @@ suspend fun getPDFPageRotatorDeleterReorder(
 
             resultPDFPath = pdfWriterFile.path
         }
+
+        pdfReader.close()
+        pdfWriter.close()
     }
 
     return resultPDFPath

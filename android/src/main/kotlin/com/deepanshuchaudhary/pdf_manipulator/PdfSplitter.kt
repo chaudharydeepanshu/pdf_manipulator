@@ -43,7 +43,8 @@ suspend fun getSplitPDFPathsByPageCount(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageCount: Int) {
             yield()
-            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val readerPdfDocument =
+                PdfDocument(PdfReader(src).setMemorySavingMode(true).setUnethicalReading(true))
             object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
@@ -129,7 +130,8 @@ suspend fun getSplitPDFPathsByByteSize(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, byteSize: Long) {
             yield()
-            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val readerPdfDocument =
+                PdfDocument(PdfReader(src).setMemorySavingMode(true).setUnethicalReading(true))
             val splitDocuments: List<PdfDocument> = object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
@@ -213,7 +215,8 @@ suspend fun getSplitPDFPathsByPageNumbers(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageNumbers: List<Int>) {
             yield()
-            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val readerPdfDocument =
+                PdfDocument(PdfReader(src).setMemorySavingMode(true).setUnethicalReading(true))
             object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
@@ -300,7 +303,8 @@ suspend fun getSplitPDFPathsByPageRanges(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRanges: List<PageRange>) {
             yield()
-            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val readerPdfDocument =
+                PdfDocument(PdfReader(src).setMemorySavingMode(true).setUnethicalReading(true))
             val splitDocuments: List<PdfDocument> = object : PdfSplitter(readerPdfDocument) {
                 var partNumber = 1
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
@@ -391,7 +395,8 @@ suspend fun getSplitPDFPathsByPageRange(
         @Throws(IOException::class)
         suspend fun splitPDF(src: File, pageRange: PageRange) {
             yield()
-            val readerPdfDocument = PdfDocument(PdfReader(src).setMemorySavingMode(true))
+            val readerPdfDocument =
+                PdfDocument(PdfReader(src).setMemorySavingMode(true).setUnethicalReading(true))
             val splitDocument: PdfDocument = object : PdfSplitter(readerPdfDocument) {
                 override fun getNextPdfWriter(documentPageRange: PageRange?): PdfWriter {
                     return try {

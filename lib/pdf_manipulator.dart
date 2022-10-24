@@ -14,4 +14,8 @@ export 'src/pdf_manipulator_method_channel.dart'
         WatermarkLayer,
         PositionType,
         PDFPagesSizeParams,
-        PageSizeInfo;
+        PageSizeInfo,
+        PdfValidityAndProtection,
+        PDFValidityAndProtectionParams,
+        PDFDecryptionParams,
+        PDFEncryptionParams;

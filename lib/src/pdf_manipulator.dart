@@ -76,6 +76,32 @@ class PdfManipulator {
     return PdfManipulatorPlatform.instance.pdfPagesSize(params: params);
   }
 
+  /// Provides pdf file validity and protection info.
+  ///
+  /// Returns PdfValidityAndProtection for pdf file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<PdfValidityAndProtection?> pdfValidityAndProtection(
+      {PDFValidityAndProtectionParams? params}) {
+    return PdfManipulatorPlatform.instance
+        .pdfValidityAndProtection(params: params);
+  }
+
+  /// Provides pdf file for decryption.
+  ///
+  /// Returns the path or uri of the resultant file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<String?> pdfDecryption({PDFDecryptionParams? params}) {
+    return PdfManipulatorPlatform.instance.pdfDecryption(params: params);
+  }
+
+  /// Provides pdf file for encryption.
+  ///
+  /// Returns the path or uri of the resultant file or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<String?> pdfEncryption({PDFEncryptionParams? params}) {
+    return PdfManipulatorPlatform.instance.pdfEncryption(params: params);
+  }
+
   /// Cancels running manipulations.
   ///
   /// Returns the cancelling message.

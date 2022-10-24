@@ -240,6 +240,66 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _pdfValidityAndProtection(
+      PDFValidityAndProtectionParams params) async {
+    PdfValidityAndProtection? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfValidityAndProtection(params: params);
+      if (kDebugMode) {
+        print(result);
+      }
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfDecryption(PDFDecryptionParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfDecryption(params: params);
+      if (kDebugMode) {
+        print(result);
+      }
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
+  Future<void> _pdfEncryption(PDFEncryptionParams params) async {
+    String? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.pdfEncryption(params: params);
+      if (kDebugMode) {
+        print(result);
+      }
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPath = result;
+      _isBusy = false;
+    });
+  }
+
   Future<void> _cancelTask() async {
     String? result;
     try {
@@ -821,6 +881,167 @@ class _MyAppState extends State<MyApp> {
                                         await _pdfWatermark(params);
                                       },
                                 child: const Text("Watermark")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("PDF Validity And Protection"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params =
+                                            PDFValidityAndProtectionParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                          ownerPassword: "ownerpw",
+                                        );
+                                        await _pdfValidityAndProtection(params);
+                                      },
+                                child: const Text(
+                                    "Print Validity And Protection")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("PDF Decryption"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFDecryptionParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                          password: "ownerpw",
+                                        );
+                                        await _pdfDecryption(params);
+                                      },
+                                child: const Text("Decrypt PDF")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: [_resultPDFPath!],
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("PDF Encryption"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.single,
+                                      mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick single file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = PDFEncryptionParams(
+                                          pdfPath: _pickedFilesPaths![0],
+                                          ownerPassword: "ownerpw",
+                                          userPassword: "userpw",
+                                          encryptionAES256: true,
+                                        );
+                                        await _pdfEncryption(params);
+                                      },
+                                child: const Text("Encrypt PDF")),
                           ],
                         ),
                         OutlinedButton(
