@@ -102,6 +102,14 @@ class PdfManipulator {
     return PdfManipulatorPlatform.instance.pdfEncryption(params: params);
   }
 
+  /// Provide images to convert to pdfs.
+  ///
+  /// Returns the paths or uris of pdf files or null if operation was cancelled.
+  /// Throws exception on error.
+  Future<List<String>?> imagesToPdfs({ImagesToPDFsParams? params}) {
+    return PdfManipulatorPlatform.instance.imagesToPdfs(params: params);
+  }
+
   /// Cancels running manipulations.
   ///
   /// Returns the cancelling message.

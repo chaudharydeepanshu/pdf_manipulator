@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   final _pickOrSavePlugin = PickOrSave();
 
   String? _mergedPDFPath;
-  List<String>? _splitPDFPaths;
+  List<String>? _resultPDFPaths;
   String? _resultPDFPath;
 
   bool _isBusy = false;
@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
     }
     if (!mounted) return;
     setState(() {
-      _splitPDFPaths = result;
+      _resultPDFPaths = result;
 
       _isBusy = false;
     });
@@ -300,6 +300,26 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _imagesToPdf(ImagesToPDFsParams params) async {
+    List<String>? result;
+    try {
+      setState(() {
+        _isBusy = true;
+      });
+      result = await _mergePdfsPlugin.imagesToPdfs(params: params);
+      if (kDebugMode) {
+        print(result);
+      }
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+    if (!mounted) return;
+    setState(() {
+      _resultPDFPaths = result;
+      _isBusy = false;
+    });
+  }
+
   Future<void> _cancelTask() async {
     String? result;
     try {
@@ -471,7 +491,7 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: _splitPDFPaths,
+                                      sourceFilesPaths: _resultPDFPaths,
                                     );
                                     await _fileSaver(params);
                                   },
@@ -1055,6 +1075,62 @@ class _MyAppState extends State<MyApp> {
                                     await _fileSaver(params);
                                   },
                             child: const Text("Save new pdf")),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await _cancelTask();
+                            },
+                            child: const Text("Cancel manipulation task")),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Text("Images to pdf"),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FilePickerParams(
+                                      localOnly: _localOnly,
+                                      copyFileToCacheDir: _copyFileToCacheDir,
+                                      filePickingType: FilePickingType.multiple,
+                                      // mimeTypeFilter: ["application/pdf"],
+                                    );
+                                    await _filePicker(params);
+                                  },
+                            child: const Text("Pick multiple file")),
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () async {
+                                        final params = ImagesToPDFsParams(
+                                          imagesPaths: _pickedFilesPaths!,
+                                          createSinglePdf: true,
+                                        );
+                                        await _imagesToPdf(params);
+                                      },
+                                child: const Text("Images to PDFs")),
+                          ],
+                        ),
+                        OutlinedButton(
+                            onPressed: _isBusy
+                                ? null
+                                : () async {
+                                    final params = FileSaverParams(
+                                      localOnly: _localOnly,
+                                      sourceFilesPaths: _resultPDFPaths,
+                                    );
+                                    await _fileSaver(params);
+                                  },
+                            child: const Text("Save new pdfs")),
                         OutlinedButton(
                             onPressed: () async {
                               await _cancelTask();

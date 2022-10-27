@@ -75,6 +75,10 @@ abstract class PdfManipulatorPlatform extends PlatformInterface {
     throw UnimplementedError('pdfEncryption() has not been implemented.');
   }
 
+  Future<List<String>?> imagesToPdfs({ImagesToPDFsParams? params}) {
+    throw UnimplementedError('imagesToPdfs() has not been implemented.');
+  }
+
   Future<String?> cancelManipulations() {
     throw UnimplementedError('cancelManipulations() has not been implemented.');
   }

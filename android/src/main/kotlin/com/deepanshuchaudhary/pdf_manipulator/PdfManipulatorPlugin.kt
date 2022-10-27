@@ -231,6 +231,13 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 encryptEmbeddedFilesOnly = call.argument("encryptEmbeddedFilesOnly") ?: false,
                 doNotEncryptMetadata = call.argument("doNotEncryptMetadata") ?: false,
             )
+            "imagesToPdfs" -> pdfManipulator!!.imagesToPdfs(
+                result,
+                sourceImagesPaths = parseMethodCallArrayOfStringArgument(
+                    call, "imagesPaths"
+                ),
+                createSinglePdf = call.argument("createSinglePdf"),
+            )
             "cancelManipulations" -> pdfManipulator!!.cancelManipulations()
             else -> result.notImplemented()
         }

@@ -117,6 +117,13 @@ class MethodChannelPdfManipulator extends PdfManipulatorPlatform {
   }
 
   @override
+  Future<List<String>?> imagesToPdfs({ImagesToPDFsParams? params}) async {
+    final List? paths = await methodChannel.invokeMethod<List?>(
+        'imagesToPdfs', params?.toJson());
+    return paths?.cast<String>();
+  }
+
+  @override
   Future<String?> cancelManipulations() async {
     final String? result =
         await methodChannel.invokeMethod<String?>('cancelManipulations');
@@ -723,6 +730,27 @@ class PDFEncryptionParams {
       'encryptionAES128': encryptionAES128,
       'encryptEmbeddedFilesOnly': encryptEmbeddedFilesOnly,
       'doNotEncryptMetadata': doNotEncryptMetadata,
+    };
+  }
+}
+
+/// Parameters for the [imagesToPdfs] method.
+class ImagesToPDFsParams {
+  /// Provide paths of images to convert to pdfs.
+  final List<String> imagesPaths;
+
+  /// Set createSinglePdf = true to pull all images in single pdf.
+  final bool createSinglePdf;
+
+  /// Create parameters for the [imagesToPdfs] method.
+  const ImagesToPDFsParams(
+      {required this.imagesPaths, this.createSinglePdf = false})
+      : assert(imagesPaths.length > 0, 'provide path for at least 1 image');
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'imagesPaths': imagesPaths,
+      'createSinglePdf': createSinglePdf,
     };
   }
 }

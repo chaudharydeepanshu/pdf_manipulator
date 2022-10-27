@@ -18,4 +18,5 @@ export 'src/pdf_manipulator_method_channel.dart'
         PdfValidityAndProtection,
         PDFValidityAndProtectionParams,
         PDFDecryptionParams,
-        PDFEncryptionParams;
+        PDFEncryptionParams,
+        ImagesToPDFsParams;

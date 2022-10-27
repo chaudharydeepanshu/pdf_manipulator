@@ -1,3 +1,7 @@
+## 0.4.5
+
+* Added `imagesToPdfs` method for converting images to single pdf or multiple pdfs.
+
 ## 0.4.4
 
 * Added `pdfEncryption` method for pdf encryption.

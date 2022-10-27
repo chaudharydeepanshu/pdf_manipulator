@@ -488,14 +488,46 @@ class PdfManipulator(
         Log.d(LOG_TAG, "pdfEncryption - OUT")
     }
 
+    // For converting images to pdfs.
+    fun imagesToPdfs(
+        resultCallback: MethodChannel.Result,
+        sourceImagesPaths: List<String>?,
+        createSinglePdf: Boolean?
+    ) {
+        Log.d(
+            LOG_TAG, "imagesToPdfs - IN, sourceImagesPaths=$sourceImagesPaths"
+        )
+
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        job = uiScope.launch {
+            try {
+                val result: List<String> = getPdfsFromImages(
+                    sourceImagesPaths!!, createSinglePdf!!
+//                  activity
+                )
+                if (result.isEmpty()) {
+                    finishSplitSuccessfullyWithListOfString(null, resultCallback)
+                } else {
+                    finishSplitSuccessfullyWithListOfString(result, resultCallback)
+                }
+
+            } catch (e: Exception) {
+                finishWithError(
+                    "imagesToPdfs_exception", e.stackTraceToString(), null, resultCallback
+                )
+            } catch (e: OutOfMemoryError) {
+                finishWithError(
+                    "imagesToPdfs_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
+                )
+            }
+        }
+        Log.d(LOG_TAG, "imagesToPdfs - OUT")
+    }
+
     fun cancelManipulations(
     ) {
         job?.cancel()
         Log.d(LOG_TAG, "Canceled Manipulations")
-    }
-
-    private fun finishWithAlreadyActiveError(resultCallback: MethodChannel.Result) {
-        resultCallback.error("already_active", "Merging is already active", null)
     }
 
     private fun finishSuccessfullyWithString(
