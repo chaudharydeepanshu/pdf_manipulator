@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
 
   bool _isBusy = false;
   final bool _localOnly = false;
-  final bool _copyFileToCacheDir = true;
+  final bool _copyFileToCacheDir = false;
   List<String>? _pickedFilesPaths;
   List<String>? _savedFilePath;
 
@@ -358,7 +358,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.multiple,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -379,8 +379,11 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_mergedPDFPath!],
-                                      filesNames: ["merged pdf.pdf"],
+                                      saveFiles: [
+                                        SaveFileInfo(
+                                            filePath: _mergedPDFPath!,
+                                            fileName: "merged pdf.pdf")
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -410,7 +413,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -491,7 +494,11 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: _resultPDFPaths,
+                                      saveFiles: List.generate(
+                                          _resultPDFPaths!.length,
+                                          (index) => SaveFileInfo(
+                                              filePath:
+                                                  _resultPDFPaths![index])),
                                     );
                                     await _fileSaver(params);
                                   },
@@ -521,7 +528,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -547,7 +554,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -577,7 +586,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -603,7 +612,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -633,7 +644,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -663,7 +674,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -693,7 +706,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -733,7 +746,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -763,7 +778,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -790,7 +805,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -820,7 +837,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -845,7 +862,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -875,7 +894,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -909,7 +928,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -939,7 +960,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -986,7 +1007,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -1012,7 +1033,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -1042,7 +1065,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.single,
-                                      mimeTypeFilter: ["application/pdf"],
+                                      mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -1070,7 +1093,9 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: [_resultPDFPath!],
+                                      saveFiles: [
+                                        SaveFileInfo(filePath: _resultPDFPath!)
+                                      ],
                                     );
                                     await _fileSaver(params);
                                   },
@@ -1100,7 +1125,7 @@ class _MyAppState extends State<MyApp> {
                                       localOnly: _localOnly,
                                       copyFileToCacheDir: _copyFileToCacheDir,
                                       filePickingType: FilePickingType.multiple,
-                                      // mimeTypeFilter: ["application/pdf"],
+                                      // mimeTypesFilter: ["application/pdf"],
                                     );
                                     await _filePicker(params);
                                   },
@@ -1113,7 +1138,7 @@ class _MyAppState extends State<MyApp> {
                                     : () async {
                                         final params = ImagesToPDFsParams(
                                           imagesPaths: _pickedFilesPaths!,
-                                          createSinglePdf: true,
+                                          createSinglePdf: false,
                                         );
                                         await _imagesToPdf(params);
                                       },
@@ -1126,7 +1151,11 @@ class _MyAppState extends State<MyApp> {
                                 : () async {
                                     final params = FileSaverParams(
                                       localOnly: _localOnly,
-                                      sourceFilesPaths: _resultPDFPaths,
+                                      saveFiles: List.generate(
+                                          _resultPDFPaths!.length,
+                                          (index) => SaveFileInfo(
+                                              filePath:
+                                                  _resultPDFPaths![index])),
                                     );
                                     await _fileSaver(params);
                                   },

@@ -1,7 +1,16 @@
 package com.deepanshuchaudhary.pdf_manipulator
 
+import android.app.Activity
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
+import android.util.Log
+import com.deepanshuchaudhary.pdf_manipulator.PdfManipulatorPlugin.Companion.LOG_TAG
+import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 
 class Utils {
@@ -73,6 +82,117 @@ class Utils {
         return if ((parsedScheme == null) || parsedScheme.isEmpty()) {
             Uri.fromFile(File(uri))
         } else parsed
+    }
+
+    fun getFileNameFromPickedDocumentUri(uri: Uri?, context: Activity): String? {
+        if (uri == null) {
+            return null
+        }
+        var fileName: String? = null
+        context.contentResolver.query(uri, null, null, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                fileName =
+                    cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+            }
+        }
+        return cleanupFileName(fileName)
+    }
+
+    private fun cleanupFileName(fileName: String?): String? {
+        // https://stackoverflow.com/questions/2679699/what-characters-allowed-in-file-names-on-android
+        return fileName?.replace(Regex("[\\\\/:*?\"<>|\\[\\]]"), "_")
+    }
+
+
+    suspend fun copyFileToCacheDirOnBackground(
+        context: Context,
+        sourceFileUri: Uri,
+        destinationFileName: String,
+        resultCallback: MethodChannel.Result?,
+    ): String? {
+        var cachedFilePath: String? = null
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        withContext(uiScope.coroutineContext) {
+            try {
+                Log.d(LOG_TAG, "Launch...")
+                Log.d(LOG_TAG, "Copy on background...")
+                val filePath = withContext(Dispatchers.IO) {
+                    copyFileToCacheDir(context, sourceFileUri, destinationFileName)
+                }
+                Log.d(LOG_TAG, "...copied on background, result: $filePath")
+                cachedFilePath = filePath
+                Log.d(LOG_TAG, "...launch")
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "copyFileToCacheDirOnBackground failed", e)
+                finishWithError(
+                    "file_copy_failed", e.localizedMessage, e.toString(), resultCallback
+                )
+            }
+        }
+        return cachedFilePath
+    }
+
+    private fun copyFileToCacheDir(
+        context: Context, sourceFileUri: Uri, destinationFileName: String
+    ): String {
+        // Getting destination file on cache directory.
+        val destinationFile = File(context.cacheDir.path, destinationFileName)
+
+        // Deleting existing destination file.
+        if (destinationFile.exists()) {
+            Log.d(LOG_TAG, "Deleting existing destination file '${destinationFile.path}'")
+            destinationFile.delete()
+        }
+
+        // Copying file to cache directory.
+        Log.d(LOG_TAG, "Copying '$sourceFileUri' to '${destinationFile.path}'")
+        var copiedBytes: Long
+        context.contentResolver.openInputStream(sourceFileUri).use { inputStream ->
+            destinationFile.outputStream().use { outputStream ->
+                copiedBytes = inputStream!!.copyTo(outputStream)
+            }
+        }
+
+        Log.d(
+            LOG_TAG,
+            "Successfully copied file to '${destinationFile.absolutePath}, bytes=$copiedBytes'"
+        )
+
+        return destinationFile.absolutePath
+    }
+
+    fun finishSuccessfullyWithString(
+        result: String?, resultCallback: MethodChannel.Result?
+    ) {
+        resultCallback?.success(result)
+    }
+
+    fun finishSplitSuccessfullyWithListOfString(
+        result: List<String>?, resultCallback: MethodChannel.Result?
+    ) {
+        resultCallback?.success(result)
+    }
+
+    fun finishSplitSuccessfullyWithListOfListOfDouble(
+        result: List<List<Double>>?, resultCallback: MethodChannel.Result?
+    ) {
+        resultCallback?.success(result)
+    }
+
+
+    fun finishSplitSuccessfullyWithListOfBoolean(
+        result: List<Boolean?>, resultCallback: MethodChannel.Result?
+    ) {
+        resultCallback?.success(result)
+    }
+
+    fun finishWithError(
+        errorCode: String,
+        errorMessage: String?,
+        errorDetails: String?,
+        resultCallback: MethodChannel.Result?
+    ) {
+        resultCallback?.error(errorCode, errorMessage, errorDetails)
     }
 
 //    fun clearPDFFilesFromCache(context: Activity) {

@@ -1,3 +1,9 @@
+## 0.4.6
+
+* Fixed `imagesToPdfs` method not working for android uris.
+* Fixed `imagesToPdfs` adding unnecessary padding to pdfs when `createSinglePdf` is set to false or default.
+* Updated example and example dependency.
+
 ## 0.4.5
 
 * Added `imagesToPdfs` method for converting images to single pdf or multiple pdfs.

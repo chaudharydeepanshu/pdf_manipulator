@@ -16,6 +16,8 @@ class PdfManipulator(
 
     private var job: Job? = null
 
+    private val utils = Utils()
+
     // For merging multiple pdf files.
     fun mergePdfs(
         resultCallback: MethodChannel.Result,
@@ -30,13 +32,13 @@ class PdfManipulator(
             try {
                 val mergedPDFPath: String? = getMergedPDFPath(sourceFilesPaths!!, activity)
 
-                finishSuccessfullyWithString(mergedPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(mergedPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "mergePdfs_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "mergePdfs_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -75,13 +77,13 @@ class PdfManipulator(
                 } else {
                     getSplitPDFPathsByPageCount(sourceFilePath!!, pageCount, activity)
                 }
-                finishSplitSuccessfullyWithListOfString(splitPDFPaths, resultCallback)
+                utils.finishSplitSuccessfullyWithListOfString(splitPDFPaths, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "splitPdf_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "splitPdf_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -105,13 +107,13 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageDeleter(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "removePdfPages_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "removePdfPages_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -135,13 +137,13 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageReorder(sourceFilePath!!, pageNumbers!!, activity)
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageReorder_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageReorder_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -174,13 +176,13 @@ class PdfManipulator(
                 val resultPDFPath: String? =
                     getPDFPageRotator(sourceFilePath!!, newPagesRotationInfo, activity)
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageRotator_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageRotator_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -220,16 +222,16 @@ class PdfManipulator(
                     activity
                 )
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageRotatorDeleterReorder_exception",
                     e.stackTraceToString(),
                     null,
                     resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfPageRotatorDeleterReorder_OutOfMemoryError",
                     e.stackTraceToString(),
                     null,
@@ -260,13 +262,13 @@ class PdfManipulator(
                     sourceFilePath!!, imageQuality!!, imageScale!!, unEmbedFonts!!, activity
                 )
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -309,13 +311,13 @@ class PdfManipulator(
                     activity
                 )
 
-                finishSuccessfullyWithString(resultPDFPath, resultCallback)
+                utils.finishSuccessfullyWithString(resultPDFPath, resultCallback)
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -339,16 +341,16 @@ class PdfManipulator(
                     sourceFilePath!!, activity
                 )
                 if (result.isEmpty()) {
-                    finishSplitSuccessfullyWithListOfListOfDouble(null, resultCallback)
+                    utils.finishSplitSuccessfullyWithListOfListOfDouble(null, resultCallback)
                 } else {
-                    finishSplitSuccessfullyWithListOfListOfDouble(result, resultCallback)
+                    utils.finishSplitSuccessfullyWithListOfListOfDouble(result, resultCallback)
                 }
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfCompressor_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -373,17 +375,17 @@ class PdfManipulator(
                     sourceFilePath!!, ownerPassword!!, activity
                 )
 
-                finishSplitSuccessfullyWithListOfBoolean(result, resultCallback)
+                utils.finishSplitSuccessfullyWithListOfBoolean(result, resultCallback)
 
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfValidityAndProtection_exception",
                     e.stackTraceToString(),
                     null,
                     resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfValidityAndProtection_OutOfMemoryError",
                     e.stackTraceToString(),
                     null,
@@ -411,14 +413,14 @@ class PdfManipulator(
                     sourceFilePath!!, ownerPassword!!, activity
                 )
 
-                finishSuccessfullyWithString(result, resultCallback)
+                utils.finishSuccessfullyWithString(result, resultCallback)
 
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfDecryption_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfDecryption_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -473,14 +475,14 @@ class PdfManipulator(
                     activity
                 )
 
-                finishSuccessfullyWithString(pdfPath, resultCallback)
+                utils.finishSuccessfullyWithString(pdfPath, resultCallback)
 
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfEncryption_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "pdfEncryption_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -502,21 +504,23 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val result: List<String> = getPdfsFromImages(
-                    sourceImagesPaths!!, createSinglePdf!!
-//                  activity
+                    sourceImagesPaths!!,
+                    createSinglePdf!!,
+                    activity,
+                    resultCallback = resultCallback
                 )
                 if (result.isEmpty()) {
-                    finishSplitSuccessfullyWithListOfString(null, resultCallback)
+                    utils.finishSplitSuccessfullyWithListOfString(null, resultCallback)
                 } else {
-                    finishSplitSuccessfullyWithListOfString(result, resultCallback)
+                    utils.finishSplitSuccessfullyWithListOfString(result, resultCallback)
                 }
 
             } catch (e: Exception) {
-                finishWithError(
+                utils.finishWithError(
                     "imagesToPdfs_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
-                finishWithError(
+                utils.finishWithError(
                     "imagesToPdfs_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )
             }
@@ -528,39 +532,5 @@ class PdfManipulator(
     ) {
         job?.cancel()
         Log.d(LOG_TAG, "Canceled Manipulations")
-    }
-
-    private fun finishSuccessfullyWithString(
-        result: String?, resultCallback: MethodChannel.Result?
-    ) {
-        resultCallback?.success(result)
-    }
-
-    private fun finishSplitSuccessfullyWithListOfString(
-        result: List<String>?, resultCallback: MethodChannel.Result?
-    ) {
-        resultCallback?.success(result)
-    }
-
-    private fun finishSplitSuccessfullyWithListOfListOfDouble(
-        result: List<List<Double>>?, resultCallback: MethodChannel.Result?
-    ) {
-        resultCallback?.success(result)
-    }
-
-
-    private fun finishSplitSuccessfullyWithListOfBoolean(
-        result: List<Boolean?>, resultCallback: MethodChannel.Result?
-    ) {
-        resultCallback?.success(result)
-    }
-
-    private fun finishWithError(
-        errorCode: String,
-        errorMessage: String?,
-        errorDetails: String?,
-        resultCallback: MethodChannel.Result?
-    ) {
-        resultCallback?.error(errorCode, errorMessage, errorDetails)
     }
 }

@@ -18,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  pick_or_save: ^0.1.1
+  pick_or_save: ^1.0.3
 
   pdf_manipulator:
     # When depending on this package from a real application you should use:

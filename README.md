@@ -16,6 +16,9 @@ Note: This package is uses iText7(AGPL LICENSE) for providing pdf manipulations.
 - Rotate, Delete, Reorder pdf pages at the same time for more efficiency.
 - Compress pdf.
 - Watermark pdf.
+- Encrypt pdf.
+- Decrypt pdf.
+- Convert images to pdf.
 
 ## Getting started
 
