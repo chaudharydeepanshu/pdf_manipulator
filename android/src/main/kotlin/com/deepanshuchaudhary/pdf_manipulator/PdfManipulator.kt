@@ -497,17 +497,15 @@ class PdfManipulator(
         createSinglePdf: Boolean?
     ) {
         Log.d(
-            LOG_TAG, "imagesToPdfs - IN, sourceImagesPaths=$sourceImagesPaths"
+            LOG_TAG,
+            "imagesToPdfs - IN, sourceImagesPaths = $sourceImagesPaths, createSinglePdf = $createSinglePdf"
         )
 
         val uiScope = CoroutineScope(Dispatchers.Main)
         job = uiScope.launch {
             try {
                 val result: List<String> = getPdfsFromImages(
-                    sourceImagesPaths!!,
-                    createSinglePdf!!,
-                    activity,
-                    resultCallback = resultCallback
+                    sourceImagesPaths!!, createSinglePdf!!, activity, resultCallback
                 )
                 if (result.isEmpty()) {
                     utils.finishSplitSuccessfullyWithListOfString(null, resultCallback)
@@ -516,10 +514,12 @@ class PdfManipulator(
                 }
 
             } catch (e: Exception) {
+                Log.e(LOG_TAG, "imagesToPdfs_exception", e)
                 utils.finishWithError(
                     "imagesToPdfs_exception", e.stackTraceToString(), null, resultCallback
                 )
             } catch (e: OutOfMemoryError) {
+                Log.e(LOG_TAG, "imagesToPdfs_OutOfMemoryError", e)
                 utils.finishWithError(
                     "imagesToPdfs_OutOfMemoryError", e.stackTraceToString(), null, resultCallback
                 )

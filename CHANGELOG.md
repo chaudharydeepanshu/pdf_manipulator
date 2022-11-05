@@ -1,6 +1,6 @@
-## 0.4.6
+## 0.4.7
 
-* Fixed `imagesToPdfs` method not working for android uris.
+* Fixed `imagesToPdfs` method not working for android uris and absolute file paths.
 * Fixed `imagesToPdfs` adding unnecessary padding to pdfs when `createSinglePdf` is set to false or default.
 * Updated example and example dependency.
 
