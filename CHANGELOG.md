@@ -1,3 +1,7 @@
+## 0.4.8
+
+* Fixed `imagesToPdfs` method not working for absolute file paths of files with names containing `:`.
+
 ## 0.4.7
 
 * Fixed `imagesToPdfs` method not working for android uris and absolute file paths.

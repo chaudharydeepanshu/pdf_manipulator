@@ -74,7 +74,9 @@ class Utils {
     fun getURI(uri: String): Uri {
         val parsed: Uri = Uri.parse(uri)
         val parsedScheme: String? = parsed.scheme
-        return if ((parsedScheme == null) || parsedScheme.isEmpty()) {
+        return if ((parsedScheme == null) || parsedScheme.isEmpty() || "${uri[0]}" == "/") {
+            // Using "${uri[0]}" == "/" in condition above because if uri is an absolute file path without any scheme starting with "/"
+            // and if its filename contains ":" then the parsed scheme will be wrong.
             Uri.fromFile(File(uri))
         } else parsed
     }
