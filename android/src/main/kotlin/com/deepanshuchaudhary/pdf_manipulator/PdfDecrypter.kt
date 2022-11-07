@@ -70,16 +70,20 @@ suspend fun getPdfDecrypted(
                 e.stackTraceToString(),
             )
             pdfWriter.close()
+            sourceFileInputStream?.close()
+            throw e
         } catch (e: PdfException) {
             Log.d(
                 LOG_TAG,
                 e.stackTraceToString(),
             )
             pdfWriter.close()
+            sourceFileInputStream?.close()
+            throw e
+        } finally {
+            //        utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
+            sourceFileInputStream?.close()
         }
-
-//        utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
-        sourceFileInputStream?.close()
 
         val end = System.nanoTime()
         println("Elapsed time in nanoseconds: ${end - begin}")

@@ -73,16 +73,19 @@ suspend fun getPdfValidityAndProtection(
                 LOG_TAG,
                 e.stackTraceToString(),
             )
+            sourceFileInputStream?.close()
+            throw e
         } catch (e: PdfException) {
             isPDFValid = false
             Log.d(
                 LOG_TAG,
                 e.stackTraceToString(),
             )
+            sourceFileInputStream?.close()
+            throw e
+        } finally {
+            sourceFileInputStream?.close()
         }
-
-//        utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
-        sourceFileInputStream?.close()
 
         val end = System.nanoTime()
         println("Elapsed time in nanoseconds: ${end - begin}")

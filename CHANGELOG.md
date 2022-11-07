@@ -1,3 +1,7 @@
+## 0.4.9
+
+* Now `pdfDecryption` finishes with error on BadPasswordException and PdfException.
+
 ## 0.4.8
 
 * Fixed `imagesToPdfs` method not working for absolute file paths of files with names containing `:`.

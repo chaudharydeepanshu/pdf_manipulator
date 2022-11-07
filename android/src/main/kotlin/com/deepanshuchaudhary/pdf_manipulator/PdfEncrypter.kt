@@ -48,8 +48,7 @@ suspend fun getPdfEncrypted(
 
         val uri = utils.getURI(sourceFilePath)
 
-        val pdfReaderFile: File =
-            File.createTempFile("readerTempFile", ".pdf")
+        val pdfReaderFile: File = File.createTempFile("readerTempFile", ".pdf")
         utils.copyDataFromSourceToDestDocument(
             sourceFileUri = uri,
             destinationFileUri = pdfReaderFile.toUri(),
@@ -58,54 +57,53 @@ suspend fun getPdfEncrypted(
         val pdfReader: PdfReader
         val pdfDocument: PdfDocument
 
-        val pdfWriterFile: File =
-            File.createTempFile("writerTempFile", ".pdf")
+        val pdfWriterFile: File = File.createTempFile("writerTempFile", ".pdf")
 
         val resultFileOutputStream: OutputStream? =
             contentResolver.openOutputStream(pdfWriterFile.toUri())
 
         var permissions = 0
 
-        if(allowPrinting){
+        if (allowPrinting) {
             permissions = EncryptionConstants.ALLOW_PRINTING
         }
-        if(allowModifyContents){
+        if (allowModifyContents) {
             permissions = permissions or EncryptionConstants.ALLOW_MODIFY_CONTENTS
         }
-        if(allowCopy){
+        if (allowCopy) {
             permissions = permissions or EncryptionConstants.ALLOW_COPY
         }
-        if(allowModifyAnnotations){
+        if (allowModifyAnnotations) {
             permissions = permissions or EncryptionConstants.ALLOW_MODIFY_ANNOTATIONS
         }
-        if(allowFillIn){
+        if (allowFillIn) {
             permissions = permissions or EncryptionConstants.ALLOW_FILL_IN
         }
-        if(allowScreenReaders){
+        if (allowScreenReaders) {
             permissions = permissions or EncryptionConstants.ALLOW_SCREENREADERS
         }
-        if(allowAssembly){
+        if (allowAssembly) {
             permissions = permissions or EncryptionConstants.ALLOW_ASSEMBLY
         }
-        if(allowDegradedPrinting){
+        if (allowDegradedPrinting) {
             permissions = permissions or EncryptionConstants.ALLOW_DEGRADED_PRINTING
         }
 
-        var encryptionAlgorithm : Int
+        var encryptionAlgorithm: Int
 
-        encryptionAlgorithm = if(standardEncryptionAES40){
+        encryptionAlgorithm = if (standardEncryptionAES40) {
             EncryptionConstants.STANDARD_ENCRYPTION_40
-        } else if(standardEncryptionAES128){
+        } else if (standardEncryptionAES128) {
             EncryptionConstants.STANDARD_ENCRYPTION_128
-        } else if(encryptionAES128){
+        } else if (encryptionAES128) {
             EncryptionConstants.ENCRYPTION_AES_128
         } else {
             EncryptionConstants.ENCRYPTION_AES_256
         }
-        if(encryptEmbeddedFilesOnly){
+        if (encryptEmbeddedFilesOnly) {
             encryptionAlgorithm = encryptionAlgorithm or EncryptionConstants.EMBEDDED_FILES_ONLY
         }
-        if(doNotEncryptMetadata){
+        if (doNotEncryptMetadata) {
             encryptionAlgorithm = encryptionAlgorithm or EncryptionConstants.DO_NOT_ENCRYPT_METADATA
         }
 
@@ -122,10 +120,8 @@ suspend fun getPdfEncrypted(
         pdfWriter.compressionLevel = 9
 
         try {
-            pdfReader =
-                PdfReader(pdfReaderFile).setMemorySavingMode(true).setUnethicalReading(true)
-            pdfDocument =
-                PdfDocument(pdfReader, pdfWriter)
+            pdfReader = PdfReader(pdfReaderFile).setMemorySavingMode(true).setUnethicalReading(true)
+            pdfDocument = PdfDocument(pdfReader, pdfWriter)
 
             result = pdfWriterFile.path
 
@@ -138,15 +134,19 @@ suspend fun getPdfEncrypted(
                 e.stackTraceToString(),
             )
             pdfWriter.close()
+            resultFileOutputStream?.close()
+            throw e
         } catch (e: PdfException) {
             Log.d(
                 LOG_TAG,
                 e.stackTraceToString(),
             )
             pdfWriter.close()
+            resultFileOutputStream?.close()
+            throw e
+        } finally {
+            resultFileOutputStream?.close()
         }
-
-        resultFileOutputStream?.close()
 
         val end = System.nanoTime()
         println("Elapsed time in nanoseconds: ${end - begin}")
