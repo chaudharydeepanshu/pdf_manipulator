@@ -2,10 +2,6 @@ package com.deepanshuchaudhary.pdf_manipulator
 
 import android.app.Activity
 import android.content.ContentResolver
-import android.util.Log
-import com.deepanshuchaudhary.pdf_manipulator.PdfManipulatorPlugin.Companion.LOG_TAG
-import com.itextpdf.kernel.exceptions.BadPasswordException
-import com.itextpdf.kernel.exceptions.PdfException
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfReader
 import com.itextpdf.kernel.pdf.PdfWriter
@@ -64,24 +60,9 @@ suspend fun getPdfDecrypted(
             pdfDocument.close()
             pdfReader.close()
             pdfWriter.close()
-        } catch (e: BadPasswordException) {
-            Log.d(
-                LOG_TAG,
-                e.stackTraceToString(),
-            )
-            pdfWriter.close()
-            sourceFileInputStream?.close()
-            throw e
-        } catch (e: PdfException) {
-            Log.d(
-                LOG_TAG,
-                e.stackTraceToString(),
-            )
-            pdfWriter.close()
-            sourceFileInputStream?.close()
-            throw e
         } finally {
-            //        utils.deleteTempFiles(listOfTempFiles = listOf(pdfReaderFile))
+
+            pdfWriter.close()
             sourceFileInputStream?.close()
         }
 

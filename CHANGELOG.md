@@ -1,4 +1,4 @@
-## 0.4.9
+## 0.5.1
 
 * Now `pdfDecryption` finishes with error on BadPasswordException and PdfException.
 
