@@ -185,8 +185,10 @@ fun unEmbedTTF(dict: PdfDictionary) {
 
     // Check if a subset was used (in which case we remove the prefix)
     var baseFont = dict.getAsName(PdfName.BaseFont)
-    if (baseFont.value.toByteArray()[6] == '+'.code.toByte()) {
+
+    if (baseFont.value.toByteArray().size >= 7 && baseFont.value.toByteArray()[6] == '+'.code.toByte()) {
         baseFont = PdfName(baseFont.value.substring(7))
+        println(baseFont)
         dict.put(PdfName.BaseFont, baseFont)
     }
 

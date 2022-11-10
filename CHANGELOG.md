@@ -1,3 +1,7 @@
+## 0.5.2
+
+* Fixes crash on `pdfCompressor` with `unEmbedFonts` set true for some pdfs.
+
 ## 0.5.1
 
 * Now `pdfDecryption` finishes with error on BadPasswordException and PdfException.
