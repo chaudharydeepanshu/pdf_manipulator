@@ -1,4 +1,4 @@
-## 0.5.4
+## 0.5.5
 
 * Updated documentation.
 * Improved example app.

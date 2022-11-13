@@ -129,7 +129,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.5.3"
+    version: "0.5.5"
   pick_or_save:
     dependency: "direct main"
     description:
