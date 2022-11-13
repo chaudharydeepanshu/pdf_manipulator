@@ -349,10 +349,10 @@ class PDFCompressorParams {
   /// Provide path of pdf file which should be compressed.
   final String pdfPath;
 
-  /// Provide path of pdf file which should be compressed.
+  /// Provide pdf page images quality greater than 0 and less tan or equal to 100.
   final int imageQuality;
 
-  /// Provide path of pdf file which should be compressed.
+  /// Provide pdf page images scale greater than 0 and less tan or equal to 5.
   final double imageScale;
 
   /// Provide true to unEmbed all fonts to decrease size further.
@@ -363,7 +363,11 @@ class PDFCompressorParams {
       {required this.pdfPath,
       required this.imageQuality,
       required this.imageScale,
-      this.unEmbedFonts = false});
+      this.unEmbedFonts = false})
+      : assert(imageScale > 0 || imageScale <= 5,
+            'imageScale should be greater than 0 and less tan or equal to 5'),
+        assert(imageQuality > 0 || imageQuality <= 100,
+            'imageQuality should be greater than 0 and less tan or equal to 100');
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -553,19 +557,19 @@ class PDFValidityAndProtectionParams {
   /// Provide path of pdf file which you want validity and protection info.
   final String pdfPath;
 
-  /// Provide owner password.
-  final String? ownerPassword;
+  /// Provide owner or user password.
+  final String? password;
 
   /// Create parameters for the [pdfValidityAndProtection] method.
   const PDFValidityAndProtectionParams({
     required this.pdfPath,
-    this.ownerPassword = "",
+    this.password = "",
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'pdfPath': pdfPath,
-      'ownerPassword': ownerPassword,
+      'password': password,
     };
   }
 }
@@ -603,72 +607,72 @@ class PDFEncryptionParams {
   /// Provide user password.
   final String userPassword;
 
-  /// Allows printing permission.
+  /// Set true to allow printing permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowPrinting;
 
-  /// Allows modify permission.
+  /// Set true to allow modify permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowModifyContents;
 
-  /// Allows copy permission.
+  /// Set true to allow copy permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowCopy;
 
-  /// Allows modifying annotations permission.
+  /// Set true to allow modifying annotations permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowModifyAnnotations;
 
-  /// Allows fill in permission.
+  /// Set true to allow fill in permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowFillIn;
 
-  /// Allows screen readers permission.
+  /// Set true to allow screen readers permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowScreenReaders;
 
-  /// Allows assembly permission.
+  /// Set true to allow assembly permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowAssembly;
 
-  /// Allows degraded printing permission.
+  /// Set true to allow degraded printing permission.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool allowDegradedPrinting;
 
-  /// Enables StandardEncryptionAES40 encryption. standardEncryptionAES40 implicitly sets doNotEncryptMetadata and encryptEmbeddedFilesOnly as false.
+  /// Set true to enable StandardEncryptionAES40 encryption. standardEncryptionAES40 implicitly sets doNotEncryptMetadata and encryptEmbeddedFilesOnly as false.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool standardEncryptionAES40;
 
-  /// Enables StandardEncryptionAES128 encryption. standardEncryptionAES128 implicitly sets EncryptionConstants.EMBEDDED_FILES_ONLY as false.
+  /// Set true to enable StandardEncryptionAES128 encryption. standardEncryptionAES128 implicitly sets EncryptionConstants.EMBEDDED_FILES_ONLY as false.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool standardEncryptionAES128;
 
-  /// Enables encryptionAES128 encryption.
+  /// Set true to enable encryptionAES128 encryption.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool encryptionAES128;
 
-  /// Enables encryptionAES256 encryption.
+  /// Set true to enable encryptionAES256 encryption.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool encryptionAES256;
 
-  /// Enables embedded files only encryption.
+  /// Set true to encrypt embedded files only.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool encryptEmbeddedFilesOnly;
 
-  /// Enables do not encrypt metadata encryption.
+  /// Set true to not encrypt metadata.
   ///
   /// Please be aware that the passed encryption types may override permissions.
   final bool doNotEncryptMetadata;

@@ -14,7 +14,7 @@ import java.io.InputStream
 // For decrypting pdf.
 suspend fun getPdfDecrypted(
     sourceFilePath: String,
-    ownerPassword: String,
+    userOrOwnerPassword: String,
     context: Activity,
 ): String? {
 
@@ -51,7 +51,8 @@ suspend fun getPdfDecrypted(
 
         try {
             pdfReader = PdfReader(
-                sourceFileInputStream, ReaderProperties().setPassword(ownerPassword.toByteArray())
+                sourceFileInputStream,
+                ReaderProperties().setPassword(userOrOwnerPassword.toByteArray())
             ).setMemorySavingMode(true).setUnethicalReading(true)
             pdfDocument = PdfDocument(pdfReader, pdfWriter)
 

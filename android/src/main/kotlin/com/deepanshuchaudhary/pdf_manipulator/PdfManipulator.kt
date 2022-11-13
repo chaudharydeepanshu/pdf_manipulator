@@ -362,7 +362,7 @@ class PdfManipulator(
     fun pdfValidityAndProtection(
         resultCallback: MethodChannel.Result,
         sourceFilePath: String?,
-        ownerPassword: String?,
+        userOrOwnerPassword: String?,
     ) {
         Log.d(
             LOG_TAG, "pdfValidityAndProtection - IN, sourceFilePath=$sourceFilePath"
@@ -372,7 +372,7 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val result: List<Boolean?> = getPdfValidityAndProtection(
-                    sourceFilePath!!, ownerPassword!!, activity
+                    sourceFilePath!!, userOrOwnerPassword!!, activity
                 )
 
                 utils.finishSplitSuccessfullyWithListOfBoolean(result, resultCallback)
@@ -400,7 +400,7 @@ class PdfManipulator(
     fun pdfDecryption(
         resultCallback: MethodChannel.Result,
         sourceFilePath: String?,
-        ownerPassword: String?,
+        userOrOwnerPassword: String?,
     ) {
         Log.d(
             LOG_TAG, "pdfDecryption - IN, sourceFilePath=$sourceFilePath"
@@ -410,7 +410,7 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val result: String? = getPdfDecrypted(
-                    sourceFilePath!!, ownerPassword!!, activity
+                    sourceFilePath!!, userOrOwnerPassword!!, activity
                 )
 
                 utils.finishSuccessfullyWithString(result, resultCallback)

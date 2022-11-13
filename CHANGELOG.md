@@ -1,3 +1,8 @@
+## 0.5.3
+
+* Updated documentation.
+* Improved example app.
+
 ## 0.5.2
 
 * Fixes crash on `pdfCompressor` with `unEmbedFonts` set true for some pdfs.

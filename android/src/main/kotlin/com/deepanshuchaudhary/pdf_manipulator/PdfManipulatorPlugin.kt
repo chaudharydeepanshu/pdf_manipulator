@@ -205,12 +205,12 @@ class PdfManipulatorPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             "pdfValidityAndProtection" -> pdfManipulator!!.pdfValidityAndProtection(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
-                ownerPassword = call.argument("password") ?: "",
+                userOrOwnerPassword = call.argument("password") ?: "",
             )
             "pdfDecryption" -> pdfManipulator!!.pdfDecryption(
                 result,
                 sourceFilePath = call.argument("pdfPath"),
-                ownerPassword = call.argument("password") ?: "",
+                userOrOwnerPassword = call.argument("password") ?: "",
             )
             "pdfEncryption" -> pdfManipulator!!.pdfEncryption(
                 result,

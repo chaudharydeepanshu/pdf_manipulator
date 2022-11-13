@@ -17,7 +17,7 @@ import java.io.InputStream
 // For checking pdf validity and encryption.
 suspend fun getPdfValidityAndProtection(
     sourceFilePath: String,
-    ownerPassword: String,
+    userOrOwnerPassword: String,
     context: Activity,
 ): List<Boolean?> {
 
@@ -51,10 +51,17 @@ suspend fun getPdfValidityAndProtection(
         val pdfDocument: PdfDocument
 
         try {
-            pdfReader = PdfReader(
-                sourceFileInputStream,
-                ReaderProperties().setPassword(ownerPassword.toByteArray())
-            ).setMemorySavingMode(true).setUnethicalReading(true)
+            pdfReader = if (userOrOwnerPassword.trim().isEmpty()) {
+                PdfReader(
+                    sourceFileInputStream, ReaderProperties()
+                ).setMemorySavingMode(true).setUnethicalReading(true)
+            } else {
+                PdfReader(
+                    sourceFileInputStream,
+                    ReaderProperties().setPassword(userOrOwnerPassword.toByteArray())
+                ).setMemorySavingMode(true).setUnethicalReading(true)
+            }
+
             pdfDocument = PdfDocument(pdfReader)
             isOwnerPasswordProtected = pdfReader.isEncrypted
             val perm = pdfReader.permissions.toInt()
@@ -74,7 +81,6 @@ suspend fun getPdfValidityAndProtection(
                 e.stackTraceToString(),
             )
             sourceFileInputStream?.close()
-            throw e
         } catch (e: PdfException) {
             isPDFValid = false
             Log.d(
@@ -82,7 +88,6 @@ suspend fun getPdfValidityAndProtection(
                 e.stackTraceToString(),
             )
             sourceFileInputStream?.close()
-            throw e
         } finally {
             sourceFileInputStream?.close()
         }

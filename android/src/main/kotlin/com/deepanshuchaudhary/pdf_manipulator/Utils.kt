@@ -83,20 +83,19 @@ class Utils {
 
     fun getFileNameFromPickedDocumentUri(uri: Uri, context: Activity): String? {
         var fileName: String? = null
-        if (uri.scheme == "content") {
+        val parsedScheme: String? = uri.scheme
+
+        if (parsedScheme == "file") {
+            fileName = uri.lastPathSegment
+        } else {
             val contentResolver: ContentResolver = context.contentResolver
             val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
-            cursor.use { cursor ->
-                if (cursor != null && cursor.moveToFirst()) {
-                    fileName =
-                        cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+            cursor.use {
+                if ((it != null) && it.moveToFirst()) {
+                    fileName = it.getString(it.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
                 }
             }
         }
-        if (fileName == null) {
-            fileName = uri.lastPathSegment
-        }
-
         return cleanupFileName(fileName)
     }
 
