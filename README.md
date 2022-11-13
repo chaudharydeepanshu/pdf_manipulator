@@ -8,7 +8,7 @@
 
 ## Package description
 
-A flutter plugin for doing various manipulations on PDF easily.
+A flutter plugin for doing various manipulations such as merge, split, compress and many more on PDF easily.
 
 **Note:** This project utilises itext7 for various operations involving PDFs and since itext7 AGPL V3 License is used in this plugin, it is also licenced under this licence. The project/plugin developer, the owner of the copyright, and the contributors are not accountable or liable for any damage resulting from this project/plugin.
 
