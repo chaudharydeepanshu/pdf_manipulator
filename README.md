@@ -206,6 +206,8 @@ List<String>? pdfsPaths = await PdfManipulator().imagesToPdfs(
 );
 ```
 
+Images in JPEG, JPEG2000, GIF, PNG, BMP, WMF, TIFF, CCITT and JBIG2 formats are supported.
+
 ### PDF validity and protection info
 
 ```dart
@@ -239,3 +241,8 @@ double? heightOfPage = pdfPagesSizeInfo[0]?.heightOfPage;
 ```
 
 **Note:** If you only want to get page size then I suggest to use [pdf_bitmaps](https://pub.dev/packages/pdf_bitmaps) as that is fast and requires less memory.
+
+
+Note: To try the demos shown in below images run the example included in this plugin.
+
+<img src="https://user-images.githubusercontent.com/85361211/201522048-1f0c9cd3-e25e-4304-bae9-3673097bfbf1.jpeg" width="20%"></img> <img src="https://user-images.githubusercontent.com/85361211/201522051-db1595b6-d229-4e46-a765-1d09728a5f8c.jpeg" width="20%"></img> <img src="https://user-images.githubusercontent.com/85361211/201522053-7fbf7531-9264-4831-97aa-6d068ee18c4a.jpeg" width="20%"></img> <img src="https://user-images.githubusercontent.com/85361211/201522055-161fd60b-b656-4db3-b310-0b2c1dcb7e67.jpeg" width="20%"></img>
