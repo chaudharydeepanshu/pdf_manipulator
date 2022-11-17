@@ -9,7 +9,6 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Image
-import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -20,7 +19,6 @@ suspend fun getPdfsFromImages(
     sourceImagesPaths: List<String>,
     createSinglePdf: Boolean,
     context: Activity,
-    resultCallback: MethodChannel.Result?
 ): List<String> {
 
     val result = mutableListOf<String>()

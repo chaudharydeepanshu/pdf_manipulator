@@ -56,8 +56,8 @@ suspend fun getSplitPDFPathsByPageCount(
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
                         pdfWritersList.add(pdfWriter)
-                        pdfWritersList.forEach { pdfWriter ->
-                            pdfWriter.flush()
+                        pdfWritersList.forEach { writer ->
+                            writer.flush()
                         }
                         pdfWriter
                     } catch (ignored: FileNotFoundException) {
@@ -143,8 +143,8 @@ suspend fun getSplitPDFPathsByByteSize(
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
                         pdfWritersList.add(pdfWriter)
-                        pdfWritersList.forEach { pdfWriter ->
-                            pdfWriter.flush()
+                        pdfWritersList.forEach { writer ->
+                            writer.flush()
                         }
                         pdfWriter
                     } catch (e: FileNotFoundException) {
@@ -228,8 +228,8 @@ suspend fun getSplitPDFPathsByPageNumbers(
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
                         pdfWritersList.add(pdfWriter)
-                        pdfWritersList.forEach { pdfWriter ->
-                            pdfWriter.flush()
+                        pdfWritersList.forEach { writer ->
+                            writer.flush()
                         }
                         pdfWriter
                     } catch (ignored: FileNotFoundException) {
@@ -316,8 +316,8 @@ suspend fun getSplitPDFPathsByPageRanges(
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
                         pdfWritersList.add(pdfWriter)
-                        pdfWritersList.forEach { pdfWriter ->
-                            pdfWriter.flush()
+                        pdfWritersList.forEach { writer ->
+                            writer.flush()
                         }
                         pdfWriter
                     } catch (e: FileNotFoundException) {
@@ -407,8 +407,8 @@ suspend fun getSplitPDFPathsByPageRange(
                         pdfWriter.setSmartMode(true)
                         pdfWriter.compressionLevel = 9
                         pdfWritersList.add(pdfWriter)
-                        pdfWritersList.forEach { pdfWriter ->
-                            pdfWriter.flush()
+                        pdfWritersList.forEach { writer ->
+                            writer.flush()
                         }
                         pdfWriter
                     } catch (e: FileNotFoundException) {

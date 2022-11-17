@@ -345,10 +345,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Merge',
@@ -369,10 +370,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                         });
                                       }
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                       CustomButton(
                           buttonText: 'Save merged PDF',
@@ -392,10 +394,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -432,10 +435,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _pickedFilePathForSplit = result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       const Divider(),
                       CustomButton(
@@ -457,10 +461,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "pageCount: $pageCount",
@@ -486,10 +491,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "byteSize: $byteSize",
@@ -514,10 +520,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "pageNumbers: $pageNumbers",
@@ -543,10 +550,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "pageRange: $pageRange",
@@ -574,10 +582,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -615,10 +624,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Rotate, Delete, Reorder PDF pages',
@@ -648,10 +658,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                         });
                                       }
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                       Text(
                         "pagesRotationInfo: $pagesRotationInfo\npageNumbersForDeleter: $pageNumbersForDeleter\npageNumbersForReorder: $pageNumbersForReorder",
@@ -678,10 +689,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -719,10 +731,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Compress PDF',
@@ -743,10 +756,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "imageQuality: $imageQuality, imageScale: $imageScale",
@@ -771,10 +785,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -812,10 +827,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Watermark PDF',
@@ -835,10 +851,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "watermarkText: $watermarkText",
@@ -863,10 +880,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -904,10 +922,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Encrypt PDF',
@@ -929,10 +948,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "userPassword: $userPassword, standardEncryptionAES128: $standardEncryptionAES128",
@@ -957,10 +977,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -998,10 +1019,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Decrypt PDF',
@@ -1021,10 +1043,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "userOrOwnerPassword: $userOrOwnerPassword",
@@ -1049,10 +1072,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -1098,10 +1122,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _pickedFilePathsForImagesToPDF = result;
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Convert images to PDF',
@@ -1123,10 +1148,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   }
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       Text(
                         "createSinglePdf: $createSinglePdf",
@@ -1153,10 +1179,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       List<String>? result =
                                           await _fileSaver(params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -1194,10 +1221,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Display page size info',
@@ -1212,10 +1240,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   List<PageSizeInfo>? result =
                                       await _pdfPagesSize(params);
 
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                     ],
                   ),
@@ -1252,10 +1281,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                           result[0];
                                     });
                                   }
-                                  callSnackBar(
-                                      mounted: mounted,
-                                      context: context,
-                                      text: result.toString());
+
+                                  if (mounted) {
+                                    callSnackBar(
+                                        context: context,
+                                        text: result.toString());
+                                  }
                                 }),
                       CustomButton(
                           buttonText: 'Display PDF validity & protection info',
@@ -1274,10 +1305,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           await _pdfValidityAndProtection(
                                               params);
 
-                                      callSnackBar(
-                                          mounted: mounted,
-                                          context: context,
-                                          text: result.toString());
+                                      if (mounted) {
+                                        callSnackBar(
+                                            context: context,
+                                            text: result.toString());
+                                      }
                                     }),
                     ],
                   ),
@@ -1312,14 +1344,9 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-callSnackBar(
-    {required bool mounted,
-    required BuildContext context,
-    required String text}) {
-  if (mounted) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-    ));
-  }
+callSnackBar({required BuildContext context, required String text}) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(text),
+  ));
 }

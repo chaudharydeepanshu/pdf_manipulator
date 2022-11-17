@@ -505,7 +505,7 @@ class PdfManipulator(
         job = uiScope.launch {
             try {
                 val result: List<String> = getPdfsFromImages(
-                    sourceImagesPaths!!, createSinglePdf!!, activity, resultCallback
+                    sourceImagesPaths!!, createSinglePdf!!, activity,
                 )
                 if (result.isEmpty()) {
                     utils.finishSplitSuccessfullyWithListOfString(null, resultCallback)
