@@ -1,3 +1,7 @@
+## 0.5.6
+
+* Updated dependency.
+
 ## 0.5.5
 
 * Updated documentation.
