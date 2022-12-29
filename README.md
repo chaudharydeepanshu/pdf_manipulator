@@ -40,7 +40,7 @@ A flutter plugin for doing various manipulations such as merge, split, compress 
 For reference see this [project file](https://github.com/chaudharydeepanshu/files_tools/blob/main/android/app/proguard-rules.pro).
 
 Then, setup your App->build.gradle buildTypes release config as done in this [project file](https://github.com/chaudharydeepanshu/files_tools/blob/54774ecf28d37c2a27d4fc666f7b178ad84ac46b/android/app/build.gradle#L77).
-If you dont do all of this then you will get PlatformException: AbstractITextEvent is only for internal usage in Release build.
+If you don't do all of this then you will get PlatformException: AbstractITextEvent is only for internal usage in Release build.
 
 **Note:** If you are getting errors in you IDE after updating this plugin to newer version and the error contains works like Redeclaration, Conflicting declarations, Overload resolution ambiguity then to fix that you probably need to remove the older version of plugin from pub cache `C:\Users\username\AppData\Local\Pub\Cache\hosted\pub.dev\older_version` or simply run `flutter clean`.
 
