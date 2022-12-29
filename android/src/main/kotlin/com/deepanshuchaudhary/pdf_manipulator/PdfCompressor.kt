@@ -99,7 +99,7 @@ suspend fun getCompressedPDFPath(
                 if (factor != 1.0f) matrix.postScale(factor, factor)
 
                 val scaledBitmap = Bitmap.createBitmap(
-                    bmp, 0, 0, image.width.toInt(), image.height.toInt(), matrix, true
+                    bmp, 0, 0, bmp.width - 1, bmp.height - 1, matrix, true
                 )
                 bmp.recycle()
                 val scaledBitmapStream = ByteArrayOutputStream()

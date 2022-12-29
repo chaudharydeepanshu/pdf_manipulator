@@ -1,3 +1,11 @@
+## 0.5.8
+
+* Updated documentation regarding PlatformException in Release build: AbstractITextEvent is only for internal usage [#2](https://github.com/chaudharydeepanshu/pdf_manipulator/issues/2).
+
+## 0.5.7
+
+* Attempts to fix "x + width must be <= bitmap.width()" exception on some devices in some case of PDF compressing.
+
 ## 0.5.6
 
 * Updated dependency.

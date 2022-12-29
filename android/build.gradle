@@ -1,3 +1,5 @@
+package android
+
 group 'com.deepanshuchaudhary.pdf_manipulator'
 version '1.0-SNAPSHOT'
 
