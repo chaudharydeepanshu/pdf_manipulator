@@ -30,6 +30,14 @@ A flutter plugin for doing various manipulations such as merge, split, compress 
 - Supports getting PDF validity and protection info.
 - Supports getting PDF page size info.
 
+**Note:** To use it in realease mode you will need to create a file named proguard-rules.pro in your project Android->App->proguard-rules.pro. In that file you need to add the below block of text at the end of the file.
+```
+# To use iText in release mode Otherwise we get
+# PlatformException AbstractITextEvent is only for internal usage.
+-keep public class com.itextpdf.**
+-keep public class org.apache.**
+```
+
 **Note:** If you are getting errors in you IDE after updating this plugin to newer version and the error contains works like Redeclaration, Conflicting declarations, Overload resolution ambiguity then to fix that you probably need to remove the older version of plugin from pub cache `C:\Users\username\AppData\Local\Pub\Cache\hosted\pub.dev\older_version` or simply run `flutter clean`.
 
 ## Getting started
