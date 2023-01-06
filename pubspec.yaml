@@ -1,6 +1,6 @@
 name: pdf_manipulator
 description: A flutter plugin for doing various manipulations such as merge, split, compress and many more on PDF easily.
-version: 0.5.8
+version: 0.5.9
 homepage: https://github.com/chaudharydeepanshu/pdf_manipulator
 repository: https://github.com/chaudharydeepanshu/pdf_manipulator
 issue_tracker: https://github.com/chaudharydeepanshu/pdf_manipulator/issues

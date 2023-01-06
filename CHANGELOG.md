@@ -1,3 +1,7 @@
+## 0.5.9
+
+* Fixes error "Build file '\pdf_manipulator\android\build.gradle' should not contain a package statement".
+
 ## 0.5.8
 
 * Updated documentation regarding PlatformException in Release build: AbstractITextEvent is only for internal usage [#2](https://github.com/chaudharydeepanshu/pdf_manipulator/issues/2).
